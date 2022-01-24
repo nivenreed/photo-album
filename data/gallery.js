@@ -15,6 +15,12 @@ const album = {
             src: `./gallery/IMG_0950.jpg`,
             created: `4th Oct 2017`,
             description: `Sayiayng I Do`,
+        },
+        {
+            title: `Photo 3`,
+            src: `./gallery/IMG_`,
+            created: `4th Oct 2017`,
+            description: `After Party`,
         }
     ]
 };
