@@ -7,19 +7,19 @@ const album = {
         {
             title: `Photo 1`,
             src: `./gallery/IMG_0945.jpg`,
-            created: new Date(1507109400 * 1000),
+            created: 1507109400,
             description: `Waliking down the aisle `,
         },
         {
             title: `Photo 2`,
             src: `./gallery/IMG_0950.jpg`,
-            created: new Date(1507109400 * 1000),
+            created: 1507109400,
             description: `Sayiayng I Do`,
         },
         {
             title: `Photo 3`,
             src: `./gallery/IMG_`,
-            created: new Date(1507109400 * 1000),
+            created: 1507109400,
             description: `After Party`,
         }
     ]
@@ -38,9 +38,5 @@ myAlbum.appendChild(description);
 document.body.appendChild(myAlbum);
 
 
-// document.body.appendChild(albumH1);
 
-
-// description.textContent = album.description;
-// document.body.appendChild(description);
 
