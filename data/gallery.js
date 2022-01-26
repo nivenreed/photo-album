@@ -37,6 +37,40 @@ myAlbum.appendChild(description);
 
 document.body.appendChild(myAlbum);
 
+const imagesUl = document.createElement('ul');
+console.log(imagesUl);
 
+// function imagesLi(album){
+//     console.log(album);  
+//     document.createElement('li');  
+// }
+//  album.images.forEach(imagesLi);
+
+// const myImages =document.createElement('li');
+// console.log(myImages);
+
+// album.images.forEach(function(myAlbums) {
+//     document.createElement('li');
+//     console.log(myAlbums);
+// }
+// my)
+function logImages(images){
+    const imagesLi = document.createElement('li');
+      imagesLi.textContent = images.title;
+    const imagesImg = document.createElement('img');
+      imagesImg.src = images.src;
+    const imagesDesc = document.createElement('p');
+      imagesDesc.textContent = images.description;  
+    imagesLi.appendChild(imagesImg);
+    imagesLi.appendChild(imagesDesc);
+    imagesUl.appendChild(imagesLi);
+    
+    // document.body.appendChild(imagesLi);
+
+    console.log(images);
+}
+album.images.forEach(logImages);
+
+document.body.appendChild(imagesUl);
 
 
