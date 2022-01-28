@@ -18,7 +18,31 @@ const album = {
         },
         {
             title: `Photo 3`,
-            src: `./gallery/IMG_`,
+            src: `./gallery/IMG_0973.jpg`,
+            created: 1507109400,
+            description: `After Party`,
+        },
+        {
+            title: `Photo 4`,
+            src: `./gallery/IMG_0980.jpg`,
+            created: 1507109400,
+            description: `After Party`,
+        },
+        {
+            title: `Photo 5`,
+            src: `./gallery/IMG_0981.jpg`,
+            created: 1507109400,
+            description: `After Party`,
+        },
+        {
+            title: `Photo 6`,
+            src: `./gallery/IMG_0988.jpg`,
+            created: 1507109400,
+            description: `After Party`,
+        },
+        {
+            title: `Photo 7`,
+            src: `./gallery/IMG_0990.jpg`,
             created: 1507109400,
             description: `After Party`,
         }
@@ -38,39 +62,38 @@ myAlbum.appendChild(description);
 document.body.appendChild(myAlbum);
 
 const imagesUl = document.createElement('ul');
-console.log(imagesUl);
+    imagesUl.classList.add('galleryImages');
 
-// function imagesLi(album){
-//     console.log(album);  
-//     document.createElement('li');  
-// }
-//  album.images.forEach(imagesLi);
-
-// const myImages =document.createElement('li');
-// console.log(myImages);
-
-// album.images.forEach(function(myAlbums) {
-//     document.createElement('li');
-//     console.log(myAlbums);
-// }
-// my)
 function logImages(images){
     const imagesLi = document.createElement('li');
-      imagesLi.textContent = images.title;
+        imagesLi.classList.add (`photo`);
+    //   imagesLi.textContent = images.title;
     const imagesImg = document.createElement('img');
       imagesImg.src = images.src;
+      imagesImg.alt = images.title;
     const imagesDesc = document.createElement('p');
-      imagesDesc.textContent = images.description;  
+    //   imagesDesc.textContent = images.description;  
     imagesLi.appendChild(imagesImg);
     imagesLi.appendChild(imagesDesc);
     imagesUl.appendChild(imagesLi);
-    
-    // document.body.appendChild(imagesLi);
-
-    console.log(images);
 }
 album.images.forEach(logImages);
 
 document.body.appendChild(imagesUl);
 
+// const imgHover = document.querySelectorAll('photo');
 
+// function handleImgHover(){
+//     console.log('You Are Hovering');
+// }
+
+// imgHover.forEach(function (photoHover) {
+//     photoHover.addEventListener('onmousenter', handleImgHover);
+// });
+
+// const butts = document.querySelector('.photo');
+
+// butts.addEventListener('mouseover', function () {
+    
+//     console.log('you clicked');
+// });
