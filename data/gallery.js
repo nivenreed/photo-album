@@ -63,7 +63,7 @@ document.body.appendChild(myAlbum);
 
 const imagesUl = document.createElement('ul');
     imagesUl.classList.add('galleryImages');
-
+      
 function logImages(images){
     const imagesLi = document.createElement('li');
         imagesLi.classList.add (`photo`);
@@ -72,7 +72,8 @@ function logImages(images){
       imagesImg.src = images.src;
       imagesImg.alt = images.title;
     const imagesDesc = document.createElement('p');
-    //   imagesDesc.textContent = images.description;  
+      imagesDesc.textContent = images.description;
+      imagesDesc.style.visibility ='hidden';  
     imagesLi.appendChild(imagesImg);
     imagesLi.appendChild(imagesDesc);
     imagesUl.appendChild(imagesLi);
@@ -81,19 +82,23 @@ album.images.forEach(logImages);
 
 document.body.appendChild(imagesUl);
 
-// const imgHover = document.querySelectorAll('photo');
 
-// function handleImgHover(){
-//     console.log('You Are Hovering');
-// }
 
-// imgHover.forEach(function (photoHover) {
-//     photoHover.addEventListener('onmousenter', handleImgHover);
-// });
 
+// adding hover event listner for discription overlay
 // const butts = document.querySelector('.photo');
 
-// butts.addEventListener('mouseover', function () {
-    
-//     console.log('you clicked');
-// });
+// function handleHover(event) {
+//     imagesDesc.style.visibility = 'visable';
+//    console.log('you clicked'); 
+//    console.log(event.currentTarget);
+// }
+
+// butts.addEventListener('mouseover', handleHover); 
+
+// const photoHover = document.querySelectorAll('.photo');
+
+// photoHover.forEach(function (hover) {
+//     console.log('hover');
+//     hover.addEventListener('mouseover', handleHover)
+// }); 
