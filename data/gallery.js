@@ -94,24 +94,17 @@ document.body.appendChild(imagesUl);
 
 
 // adding hover event listner for discription overlay
-const descOvelay = document.querySelector('.photo');
 
 function handleHover(li) {
-   console.log('you clicked'); 
-   console.log(li);
-      console.log(li.target);
-    //  li.currentTarget.closest('p').style.visibility = 'visible';
-   
-//    const descOvelay = document.getElementById(li.currentTarget);
-//    console.log(descOvelay);
-//    descOvelay.style.visibility = 'visible';
+      li.currentTarget.childNodes[1].style.visibility = 'visible';
 }
-
-descOvelay.addEventListener('mouseover', handleHover); 
+function handleHoverOut(li) { 
+       li.currentTarget.childNodes[1].style.visibility = 'hidden';
+ } 
 
 const photoHover = document.querySelectorAll('.photo');
 
 photoHover.forEach(function (hover) {
-    console.log('hover');
-    hover.addEventListener('mouseover', handleHover)
+    hover.addEventListener('mouseover', handleHover);
+    hover.addEventListener('mouseout', handleHoverOut)
 }); 
