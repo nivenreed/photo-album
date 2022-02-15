@@ -92,7 +92,7 @@ function logImages(images){
         imagesTitle.textContent = images.title;
     const imagesDate = document.createElement('p');
          const date = new Date(album.images[0].created * 1000);
-             imagesDate.textContent = date.toLocaleString();
+             imagesDate.textContent = date.toLocaleString('en-GB', {year:'numeric', month:'short', day:'numeric'});
           
     const imagesOverlay = document.createElement('div');
         imagesOverlay.classList.add ('overlay');
