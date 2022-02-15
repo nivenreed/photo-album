@@ -85,12 +85,29 @@ function logImages(images){
     const imagesImg = document.createElement('img');
       imagesImg.src = images.src;
       imagesImg.alt = images.title;
-    const imagesDesc = document.createElement('p');
-      imagesDesc.classList.add ('descOverlay');  
+   const imagesDesc = document.createElement('p');
+      imagesDesc.classList.add ('desc');  
       imagesDesc.textContent = images.description;
-      imagesDesc.style.visibility ='hidden';  
+    const imagesTitle = document.createElement('h2');
+        imagesTitle.textContent = images.title;
+    const imagesDate = document.createElement('p');
+         const date = new Date(album.images[0].created * 1000);
+             imagesDate.textContent = date.toLocaleString('en-GB', {year:'numeric', month:'short', day:'numeric'});
+          
+    const imagesOverlay = document.createElement('div');
+        imagesOverlay.classList.add ('overlay');
+        imagesOverlay.appendChild(imagesTitle);
+        imagesOverlay.appendChild(imagesDesc);
+        imagesOverlay.appendChild(imagesDate);
+        imagesOverlay.style.visibility ='hidden';
+
+    //   const imagesDesc = document.createElement('p');
+    //   imagesDesc.classList.add ('descOverlay');  
+    //   imagesDesc.textContent = images.description;
+    //   imagesDesc.style.visibility ='hidden';      
+      
     imagesLi.appendChild(imagesImg);
-    imagesLi.appendChild(imagesDesc);
+    imagesLi.appendChild(imagesOverlay);
     imagesUl.appendChild(imagesLi);
 }
 album.images.forEach(logImages);
