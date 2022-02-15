@@ -121,9 +121,12 @@ document.body.appendChild(imagesUl);
 
 function handleHover(li) {
       li.currentTarget.childNodes[1].style.visibility = 'visible';
+      li.currentTarget.childNodes[1].classList.replace ('overlayVis', 'overlay');
 }
 function handleHoverOut(li) { 
        li.currentTarget.childNodes[1].style.visibility = 'hidden';
+       li.currentTarget.childNodes[1].classList.replace ('overlay', 'overlayVis');
+       
  } 
 
 const photoHover = document.querySelectorAll('.photo');
