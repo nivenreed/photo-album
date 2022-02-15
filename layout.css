@@ -106,6 +106,7 @@ p{
 }
 .overlayVis * {
     transform: translateY(50px);
+    transition: transform 0.25s;
 }
 .overlay h2, p{
     color: white;
