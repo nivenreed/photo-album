@@ -95,7 +95,7 @@ function logImages(images){
              imagesDate.textContent = date.toLocaleString('en-GB', {year:'numeric', month:'short', day:'numeric'});
           
     const imagesOverlay = document.createElement('div');
-        imagesOverlay.classList.add ('overlay');
+        imagesOverlay.classList.add('overlay');
         imagesOverlay.appendChild(imagesTitle);
         imagesOverlay.appendChild(imagesDesc);
         imagesOverlay.appendChild(imagesDate);
@@ -121,14 +121,17 @@ document.body.appendChild(imagesUl);
 
 function handleHover(li) {
       li.currentTarget.childNodes[1].style.visibility = 'visible';
+      li.currentTarget.childNodes[1].classList.replace('overlayVis', 'overlay');
 }
 function handleHoverOut(li) { 
        li.currentTarget.childNodes[1].style.visibility = 'hidden';
+       li.currentTarget.childNodes[1].classList.replace('overlay', 'overlayVis');
+       
  } 
 
 const photoHover = document.querySelectorAll('.photo');
 
-photoHover.forEach(function (hover) {
+photoHover.forEach(function(hover) {
     hover.addEventListener('mouseover', handleHover);
     hover.addEventListener('mouseout', handleHoverOut)
 }); 
