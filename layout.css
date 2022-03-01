@@ -114,6 +114,24 @@ p{
 .photo{
     position: relative;
 }
+.single img{ 
+    max-width: 100%;
+}
+.single{
+    position: relative;
+}
+.forwardButt{
+    color: rgba(255, 255, 255, 0);
+    position: absolute;
+    /* display: flex; */
+    top: 50%;
+    bottom: 50%;
+    transform: translate(-50%, -50%);
+    right: 0;
+    height: 10%;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+}
 
 @media screen and (max-width: 800px) {
     .galleryImages li{
