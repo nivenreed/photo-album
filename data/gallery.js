@@ -136,8 +136,7 @@ function logImages(images, index, array) {
       //   if (index >= 0 && index < index.length) {
       //     index++;
       //     image.src = ;
-        }
-      }
+      // }
     });
   });
   imagesUl.appendChild(imagesLi);
