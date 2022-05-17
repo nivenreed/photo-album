@@ -2,21 +2,21 @@
 
 const album = {
   title: `Bali`,
-  description: `Trirp to Bali for Will & Erin's Wedding`,
+  description: `Trip to Bali for Will & Erin's Wedding`,
   images: [
     {
       title: `Photo 1`,
       thumbnailSrc: './thumbnail/IMG',
       src: `./gallery/IMG_0945.JPG`,
       created: 1507109400,
-      description: `Waliking down the aisle `,
+      description: `Walking down the aisle `,
     },
     {
       title: `Photo 2`,
       thumbnailSrc: './thumbnail/IMG',
       src: `./gallery/IMG_0950.JPG`,
       created: 1507109400,
-      description: `Sayiayng I Do`,
+      description: `Saying I Do`,
     },
     {
       title: `Photo 3`,
@@ -73,12 +73,153 @@ myAlbum.classList.add('album');
 myAlbum.appendChild(albumH1);
 myAlbum.appendChild(description);
 
+const accountBtn = document.getElementsByClassName('accountBtn');
+const accountDropDown = document.createElement('div');
+const signIn = document.createElement('a');
+const profile = document.createElement('a');
+profile.setAttribute('href', '#');
+profile.innerHTML = 'Profile';
+const settings = document.createElement('a');
+settings.setAttribute('href', '#');
+settings.innerHTML = 'Settings';
+const logOut = document.createElement('a');
+logOut.setAttribute('href', '#');
+logOut.innerHTML = 'Log Out';
+accountDropDown.classList.add('dropDownContent');
+signIn.setAttribute('href', '/index.html');
+signIn.innerHTML = 'Sign In';
+accountDropDown.appendChild(profile);
+accountDropDown.appendChild(settings);
+accountDropDown.appendChild(signIn);
+accountDropDown.appendChild(logOut);
+document.querySelector('.accountBtn').appendChild(accountDropDown);
+
 document.body.appendChild(myAlbum);
+
+let currentImageIndex = 0;
+
+let value;
+
+const value2 = localStorage.getItem('class');
+
+const gallery = document.createElement('div');
+gallery.classList.add('gallery');
 
 const imagesUl = document.createElement('ul');
 imagesUl.classList.add('galleryImages');
 
-function logImages(images, index, array) {
+const mainImage = document.createElement('div');
+const image = document.createElement('div');
+const singleImage = document.createElement('img');
+const closeBtn = document.createElement('button');
+const mainImageNav = document.createElement('div');
+const backButt = document.createElement('button');
+const forwardButt = document.createElement('button');
+document.body.appendChild(mainImage);
+
+function myFunction() {
+  accountDropDown.classList.toggle('show');
+}
+
+accountBtn[0].addEventListener('click', myFunction);
+
+window.onclick = function (e) {
+  if (!e.target.matches('.accountBtn')) {
+    const dropdowns = document.getElementsByClassName('dropDownContent');
+    let i;
+    for (i = 0; i < dropdowns.length; i++) {
+      const openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+};
+
+function addSingleImage() {
+  image.classList.add('image');
+  mainImageNav.classList.add('mainImageNav');
+  mainImage.classList.add('mainImage');
+  singleImage.classList.add('singleImage');
+  closeBtn.classList.add('closeBtn');
+  mainImageNav.appendChild(closeBtn);
+  closeBtn.innerHTML = '&#10006;';
+  backButt.classList.add('backButt');
+  backButt.innerHTML = '&#8249;';
+  forwardButt.classList.add('forwardButt');
+  forwardButt.innerHTML = '&#8250;';
+  mainImageNav.appendChild(forwardButt);
+  mainImageNav.appendChild(backButt);
+  image.appendChild(singleImage);
+  mainImage.appendChild(image);
+  mainImage.appendChild(mainImageNav);
+}
+
+function removeNextButt() {
+  if (currentImageIndex === 0) {
+    backButt.style.visibility = 'hidden';
+  } else {
+    backButt.style.visibility = 'visible';
+  }
+  if (currentImageIndex === album.images.length - 1) {
+    forwardButt.style.visibility = 'hidden';
+  } else {
+    forwardButt.style.visibility = 'visible';
+  }
+}
+
+function updateSingleImage() {
+  singleImage.src = album.images[currentImageIndex].src;
+  removeNextButt();
+}
+
+const forwardButtClick = () => {
+  if (currentImageIndex < album.images.length - 1) {
+    currentImageIndex += 1;
+    updateSingleImage();
+  }
+};
+const backButtClick = () => {
+  if (currentImageIndex > 0) {
+    currentImageIndex -= 1;
+    updateSingleImage();
+  }
+};
+
+function pageLoadView() {
+  if (value2 !== null) {
+    imagesUl.classList.remove('galleryImages');
+    imagesUl.classList.add(value2);
+    addSingleImage();
+  }
+}
+
+onload = function () {
+  pageLoadView();
+};
+
+function loadTumbnails() {
+  imagesUl.classList.remove('galleryImages');
+  imagesUl.classList.add(value);
+}
+
+forwardButt.addEventListener('click', forwardButtClick);
+// forwardButt.appendChild(forwardButtImg);
+
+backButt.addEventListener('click', backButtClick);
+// backButt.appendChild(backButtImg);
+
+closeBtn.addEventListener('click', () => {
+  imagesUl.classList.remove('thumbnails');
+  imagesUl.classList.add('galleryImages');
+  // const element = document.getElementsByClassName('iamges');
+  mainImage.removeChild(image);
+  mainImage.removeChild(mainImageNav);
+  // document.body.removeChild(image);
+  localStorage.clear();
+});
+
+function logImages(images, index) {
   const imagesLi = document.createElement('li');
   imagesLi.classList.add(`photo`);
   //   imagesLi.textContent = images.title;
@@ -97,10 +238,6 @@ function logImages(images, index, array) {
     month: 'short',
     day: 'numeric',
   });
-  // function clearDom() {
-  //   const domObject = document.getElementByClass('.galleryImages');
-  //   domObject.remove();
-  // }
 
   const imagesOverlay = document.createElement('div');
   imagesOverlay.classList.add('overlay');
@@ -112,39 +249,22 @@ function logImages(images, index, array) {
   imagesLi.appendChild(imagesImg);
   imagesLi.appendChild(imagesOverlay);
   imagesLi.addEventListener('click', () => {
-    imagesUl.remove();
-    const imageDiv = document.createElement('div');
-    imageDiv.classList.add('single');
-    const image = document.createElement('img');
-    image.src = images.src;
-    image.alt = images.title;
-    image.classList.add('singleImg');
-    const forwardButt = document.createElement('img');
-    forwardButt.classList.add('forwardButt');
-    forwardButt.src = './assets/forward_arrow.svg';
-    imageDiv.appendChild(image);
-    imageDiv.appendChild(forwardButt);
-    document.body.appendChild(imageDiv);
-    // console.log(images);
-    forwardButt.addEventListener('click', () => {
-      image.src = array[index + 1].src;
-      console.log(images);
-      console.log(array[index + 1].src);
-      // console.log(album.images.length);
-      // images.src += 1;
-      // function nextImage(next) {
-      //   if (index >= 0 && index < index.length) {
-      //     index++;
-      //     image.src = ;
-      // }
-    });
+    currentImageIndex = index;
+    updateSingleImage();
+    addSingleImage();
+    localStorage.setItem('class', 'thumbnails');
+    const clickedItem = localStorage.getItem('class');
+    value = clickedItem;
+    loadTumbnails();
   });
+
   imagesUl.appendChild(imagesLi);
+  gallery.appendChild(imagesUl);
 }
 
 album.images.forEach(logImages);
 
-document.body.appendChild(imagesUl);
+document.body.appendChild(gallery);
 
 // adding hover event listner for discription overlay
 
@@ -156,7 +276,40 @@ function handleHoverOut(li) {
   li.currentTarget.childNodes[1].style.visibility = 'hidden';
   li.currentTarget.childNodes[1].classList.replace('overlay', 'overlayVis');
 }
+const photoHover = document.querySelectorAll('.photo');
 
+photoHover.forEach((hover) => {
+  hover.addEventListener('mouseover', handleHover);
+  hover.addEventListener('mouseout', handleHoverOut);
+});
+
+/**
+ * function Starts here
+ */
+updateSingleImage();
+
+/* Stuff I have Tried */
+// imagesLi.addEventListener('click', () => {
+//   imagesUl.remove();
+//   const imageDiv = document.createElement('div');
+//   imageDiv.classList.add('single');
+//   const image = document.createElement('img');
+//   image.src = images.src;
+//   image.alt = images.title;
+//   image.classList.add('singleImg');
+//   const forwardButt = document.createElement('img');
+//   forwardButt.classList.add('forwardButt');
+//   forwardButt.src = './assets/forward_arrow.svg';
+//   imageDiv.appendChild(image);
+//   imageDiv.appendChild(forwardButt);
+//   document.body.appendChild(imageDiv);
+//   forwardButt.addEventListener('click', () => {
+//     image.src = array[index + 1].src;
+
+//     currentImageIndex = index;
+//     console.log(index);
+//   });
+// });
 // function handleClick(event) {
 //   const imageDiv = document.createElement('div');
 //   imageDiv.classList.add('single');
@@ -169,14 +322,7 @@ function handleHoverOut(li) {
 // }
 // album.images.forEach(handleClick);
 
-const photoHover = document.querySelectorAll('.photo');
 // const photoClick = document.querySelectorAll('.photo');
-
-photoHover.forEach((hover) => {
-  hover.addEventListener('mouseover', handleHover);
-  hover.addEventListener('mouseout', handleHoverOut);
-  // hover.addEventListener('click', handleClick);
-});
 
 // photoClick.forEach((click) => {
 //   click.addEventListener('click', () => {
@@ -215,7 +361,7 @@ photoHover.forEach((hover) => {
 //   click.addEventListener('click', handleClick);
 // });
 
-// function loadSingleImage(images) {
+// function (images) {
 //   const myImage = document.createElement('div');
 //   myImage.classList.add('singleImage');
 //   const imageImg = document.createElement('img');
@@ -225,6 +371,6 @@ photoHover.forEach((hover) => {
 //   myImage.appendChild(imageImg);
 //   imageDiv.appendChild(myImage);
 // }
-// album.images.forEach(loadSingleImage);
+// album.images.forEach();
 
 // document.body.appendChild(imageDiv);
