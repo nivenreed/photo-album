@@ -178,14 +178,12 @@ function removeNextButt() {
   }
 }
 
-function updateSingleImage() {
-  singleImage.src = album.images[currentImageIndex].src;
-  removeNextButt();
-  updateUrlHash();
-  // displayHash();
-}
 function displayHash() {
   if (window.location.hash.includes('photo')) {
+    const array = window.location.hash.split('/');
+    const index = array[2];
+    currentImageIndex = album.images[index];
+    console.log(album.images[index]);
     console.log('hash is not empty');
     // const elems = document.querySelectorAll('.album h1');
     // elems[0].innerText = `Current Hash: ${theHash}`;
@@ -208,6 +206,13 @@ function displayHash() {
 // pic[0].src = album.images[currentImageIndex].src;
 // return true;
 // }
+
+function updateSingleImage() {
+  // singleImage.src = album.images[currentImageIndex].src;
+  removeNextButt();
+  updateUrlHash();
+  displayHash();
+}
 window.addEventListener('hashchange', () => {
   console.log('hashchange event');
   displayHash();
