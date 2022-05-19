@@ -67,10 +67,12 @@ const albumH1 = document.createElement('h1');
 albumH1.textContent = album.title;
 const description = document.createElement('p');
 description.textContent = album.description;
+const picture = document.createElement('img');
 
 const myAlbum = document.createElement('div');
 myAlbum.classList.add('album');
 myAlbum.appendChild(albumH1);
+myAlbum.appendChild(picture);
 myAlbum.appendChild(description);
 
 const accountBtn = document.getElementsByClassName('accountBtn');
@@ -98,9 +100,9 @@ document.body.appendChild(myAlbum);
 
 let currentImageIndex = 0;
 
-let value;
+// let value;
 
-const value2 = localStorage.getItem('class');
+// const value2 = localStorage.getItem('class');
 
 const gallery = document.createElement('div');
 gallery.classList.add('gallery');
@@ -136,6 +138,12 @@ window.onclick = function (e) {
   }
 };
 
+function updateUrlHash() {
+  if (window.location.hash !== '') {
+    window.location.hash = `/photo/${currentImageIndex}`;
+  }
+}
+
 function addSingleImage() {
   image.classList.add('image');
   mainImageNav.classList.add('mainImageNav');
@@ -153,6 +161,8 @@ function addSingleImage() {
   image.appendChild(singleImage);
   mainImage.appendChild(image);
   mainImage.appendChild(mainImageNav);
+  imagesUl.classList.remove('galleryImages');
+  imagesUl.classList.add('thumbnails');
 }
 
 function removeNextButt() {
@@ -171,7 +181,42 @@ function removeNextButt() {
 function updateSingleImage() {
   singleImage.src = album.images[currentImageIndex].src;
   removeNextButt();
+  updateUrlHash();
+  // displayHash();
 }
+function displayHash() {
+  if (window.location.hash.includes('photo')) {
+    console.log('hash is not empty');
+    // const elems = document.querySelectorAll('.album h1');
+    // elems[0].innerText = `Current Hash: ${theHash}`;
+    // const pic = document.querySelectorAll('.album img');
+    // updateSingleImage();
+    // pic[0].src = currentImageIndex.src;
+    return true;
+  }
+  // let theHash = window.location.hash;
+  // if (theHash > '#/photo/') {
+  window.location.hash = '_index';
+  // pic[0].src = '';
+  console.log('hash empty');
+  //   theHash = './index.html';
+}
+// console.log('hash is not empty');
+// const elems = document.querySelectorAll('.album h1');
+// elems[0].innerText = `Current Hash: ${theHash}`;
+// const pic = document.querySelectorAll('.album img');
+// pic[0].src = album.images[currentImageIndex].src;
+// return true;
+// }
+window.addEventListener('hashchange', () => {
+  console.log('hashchange event');
+  displayHash();
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  console.log('DOMContentLoaded event');
+  displayHash();
+});
 
 const forwardButtClick = () => {
   if (currentImageIndex < album.images.length - 1) {
@@ -186,22 +231,22 @@ const backButtClick = () => {
   }
 };
 
-function pageLoadView() {
-  if (value2 !== null) {
-    imagesUl.classList.remove('galleryImages');
-    imagesUl.classList.add(value2);
-    addSingleImage();
-  }
-}
+// function pageLoadView() {
+//   if (value2 !== null) {
+//     imagesUl.classList.remove('galleryImages');
+//     imagesUl.classList.add(value2);
+//     addSingleImage();
+//   }
+// }
 
-onload = function () {
-  pageLoadView();
-};
+// onload = function () {
+//   pageLoadView();
+// };
 
-function loadTumbnails() {
-  imagesUl.classList.remove('galleryImages');
-  imagesUl.classList.add(value);
-}
+// function loadTumbnails() {
+//   imagesUl.classList.remove('galleryImages');
+//   imagesUl.classList.add(value);
+// }
 
 forwardButt.addEventListener('click', forwardButtClick);
 // forwardButt.appendChild(forwardButtImg);
@@ -251,11 +296,13 @@ function logImages(images, index) {
   imagesLi.addEventListener('click', () => {
     currentImageIndex = index;
     updateSingleImage();
+    // addSingleImage();
+    // localStorage.setItem('class', 'thumbnails');
+    // const clickedItem = localStorage.getItem('class');
+    // value = clickedItem;
+    // loadTumbnails();
+    // updateUrlHash();
     addSingleImage();
-    localStorage.setItem('class', 'thumbnails');
-    const clickedItem = localStorage.getItem('class');
-    value = clickedItem;
-    loadTumbnails();
   });
 
   imagesUl.appendChild(imagesLi);
