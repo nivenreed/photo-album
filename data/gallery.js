@@ -100,10 +100,6 @@ document.body.appendChild(myAlbum);
 
 let currentImageIndex = 0;
 
-// let value;
-
-// const value2 = localStorage.getItem('class');
-
 const gallery = document.createElement('div');
 gallery.classList.add('gallery');
 
@@ -139,9 +135,7 @@ window.onclick = function (e) {
 };
 
 function updateUrlHash() {
-  if (window.location.hash !== '') {
-    window.location.hash = `/photo/${currentImageIndex}`;
-  }
+  window.location.hash = `/photo/${currentImageIndex}`;
 }
 
 function addSingleImage() {
@@ -177,44 +171,35 @@ function removeNextButt() {
     forwardButt.style.visibility = 'visible';
   }
 }
-
-function displayHash() {
-  if (window.location.hash.includes('photo')) {
-    const array = window.location.hash.split('/');
-    const index = array[2];
-    currentImageIndex = album.images[index];
-    console.log(album.images[index]);
-    console.log('hash is not empty');
-    // const elems = document.querySelectorAll('.album h1');
-    // elems[0].innerText = `Current Hash: ${theHash}`;
-    // const pic = document.querySelectorAll('.album img');
-    // updateSingleImage();
-    // pic[0].src = currentImageIndex.src;
-    return true;
-  }
-  // let theHash = window.location.hash;
-  // if (theHash > '#/photo/') {
-  window.location.hash = '_index';
-  // pic[0].src = '';
-  console.log('hash empty');
-  //   theHash = './index.html';
-}
-// console.log('hash is not empty');
-// const elems = document.querySelectorAll('.album h1');
-// elems[0].innerText = `Current Hash: ${theHash}`;
-// const pic = document.querySelectorAll('.album img');
-// pic[0].src = album.images[currentImageIndex].src;
-// return true;
-// }
-
 function updateSingleImage() {
-  // singleImage.src = album.images[currentImageIndex].src;
+  singleImage.src = album.images[currentImageIndex].src;
   removeNextButt();
   updateUrlHash();
-  displayHash();
+  // if (!initial) updateUrlHash();
 }
+function hashRemove() {
+  window.location.hash = '';
+}
+
+function displayHash() {
+  const array = window.location.hash.split('/');
+  const newIndex = array[2];
+  if (
+    window.location.hash.includes('photo/') &&
+    newIndex < album.images.length &&
+    newIndex >= 0 &&
+    newIndex !== ''
+  ) {
+    currentImageIndex = newIndex;
+    updateSingleImage();
+    addSingleImage();
+    return true;
+  }
+  hashRemove();
+  console.log('hash empty');
+}
+
 window.addEventListener('hashchange', () => {
-  console.log('hashchange event');
   displayHash();
 });
 
@@ -225,48 +210,30 @@ window.addEventListener('DOMContentLoaded', () => {
 
 const forwardButtClick = () => {
   if (currentImageIndex < album.images.length - 1) {
-    currentImageIndex += 1;
+    currentImageIndex++;
+    console.log(currentImageIndex);
     updateSingleImage();
+    // displayHash();
   }
 };
 const backButtClick = () => {
   if (currentImageIndex > 0) {
     currentImageIndex -= 1;
+    console.log(currentImageIndex);
     updateSingleImage();
   }
 };
 
-// function pageLoadView() {
-//   if (value2 !== null) {
-//     imagesUl.classList.remove('galleryImages');
-//     imagesUl.classList.add(value2);
-//     addSingleImage();
-//   }
-// }
-
-// onload = function () {
-//   pageLoadView();
-// };
-
-// function loadTumbnails() {
-//   imagesUl.classList.remove('galleryImages');
-//   imagesUl.classList.add(value);
-// }
-
 forwardButt.addEventListener('click', forwardButtClick);
-// forwardButt.appendChild(forwardButtImg);
 
 backButt.addEventListener('click', backButtClick);
-// backButt.appendChild(backButtImg);
 
 closeBtn.addEventListener('click', () => {
   imagesUl.classList.remove('thumbnails');
   imagesUl.classList.add('galleryImages');
-  // const element = document.getElementsByClassName('iamges');
   mainImage.removeChild(image);
   mainImage.removeChild(mainImageNav);
-  // document.body.removeChild(image);
-  localStorage.clear();
+  hashRemove();
 });
 
 function logImages(images, index) {
@@ -301,13 +268,9 @@ function logImages(images, index) {
   imagesLi.addEventListener('click', () => {
     currentImageIndex = index;
     updateSingleImage();
-    // addSingleImage();
-    // localStorage.setItem('class', 'thumbnails');
-    // const clickedItem = localStorage.getItem('class');
-    // value = clickedItem;
-    // loadTumbnails();
-    // updateUrlHash();
     addSingleImage();
+    displayHash();
+    updateUrlHash();
   });
 
   imagesUl.appendChild(imagesLi);
@@ -338,9 +301,27 @@ photoHover.forEach((hover) => {
 /**
  * function Starts here
  */
-updateSingleImage();
+// updateSingleImage();
 
 /* Stuff I have Tried */
+
+// function pageLoadView() {
+//   if (value2 !== null) {
+//     imagesUl.classList.remove('galleryImages');
+//     imagesUl.classList.add(value2);
+//     addSingleImage();
+//   }
+// }
+
+// onload = function () {
+//   pageLoadView();
+// };
+
+// function loadTumbnails() {
+//   imagesUl.classList.remove('galleryImages');
+//   imagesUl.classList.add(value);
+// }
+
 // imagesLi.addEventListener('click', () => {
 //   imagesUl.remove();
 //   const imageDiv = document.createElement('div');
