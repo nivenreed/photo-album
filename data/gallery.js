@@ -182,7 +182,7 @@ const backButtClick = () => {
   }
 };
 
-function logImages(images, index) {
+function loadAlbumlbumIages(images, index) {
   const imagesLi = document.createElement('li');
   imagesLi.classList.add(`photo`);
   const imagesImg = document.createElement('img');
@@ -241,7 +241,7 @@ function handleHoverOut(li) {
  * Run the page start here
  */
 setupPageElements();
-album.images.forEach(logImages);
+album.images.forEach(loadAlbumlbumIages);
 document.body.appendChild(gallery);
 
 /**
