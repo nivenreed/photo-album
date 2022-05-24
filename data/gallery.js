@@ -119,8 +119,15 @@ function addSingleImage() {
   imagesUl.classList.add('thumbnails');
 }
 
+function changePageTitle() {
+  if (window.location.hash.includes('photo/')) {
+    document.title = `${album.title} - ${album.images[currentImageIndex].title}`;
+  } else {
+    document.title = `${album.title}`;
+  }
+}
+
 function removeNextButt() {
-  console.log(currentImageIndex);
   if (currentImageIndex === 0) {
     backButt.style.visibility = 'hidden';
   } else {
@@ -137,6 +144,7 @@ function updateSingleImage() {
   singleImage.src = album.images[currentImageIndex].src;
   removeNextButt();
   updateUrlHash();
+  changePageTitle();
 }
 
 function hashRemove() {
@@ -230,7 +238,7 @@ function handleHoverOut(li) {
 }
 
 /**
- * Run the pageun start here
+ * Run the page start here
  */
 setupPageElements();
 album.images.forEach(logImages);
