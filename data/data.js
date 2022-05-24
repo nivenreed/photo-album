@@ -1,0 +1,62 @@
+const album = {
+  title: `Bali`,
+  description: `Trip to Bali for Will & Erin's Wedding`,
+  images: [
+    {
+      title: `Photo 1`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/IMG_0945.JPG`,
+      created: 1507109400,
+      description: `Walking down the aisle `,
+    },
+    {
+      title: `Photo 2`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/IMG_0950.JPG`,
+      created: 1507109400,
+      description: `Saying I Do`,
+    },
+    {
+      title: `Photo 3`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/IMG_0973.JPG`,
+      created: 1507109400,
+      description: `After Party`,
+    },
+    {
+      title: `Photo 4`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/IMG_0980.JPG`,
+      created: 1507109400,
+      description: `After Party`,
+    },
+    {
+      title: `Photo 5`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/IMG_0981.JPG`,
+      created: 1507109400,
+      description: `After Party`,
+    },
+    {
+      title: `Photo 6`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/IMG_0988.JPG`,
+      created: 1507109400,
+      description: `After Party`,
+    },
+    {
+      title: `Photo 7`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/IMG_0990.jpg`,
+      created: 1507109400,
+      description: `After Party`,
+    },
+    {
+      title: `Photo `,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/g0100804.JPG`,
+      created: 1507109400,
+      description: `After Party`,
+    },
+  ],
+};
