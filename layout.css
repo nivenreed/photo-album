@@ -1,0 +1,280 @@
+*{
+    box-sizing: border-box;
+}
+body,
+p,
+a,
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style-type: none;
+}
+:root{
+    --text: #775e8b;
+    --line:  #9273ac9f;
+}
+h1, h2, h3, h4{
+    color: var(--text);
+    font-family: Roboto;
+}
+p{
+    color: var(--text);
+    font-family: Roboto;
+}
+
+.menuBar li {
+  display: inline-block;
+  padding: 10px;
+  color: var(--text);
+}
+.menuBar {
+  padding: 20px 30px 10px;
+  border-bottom: 2px solid var(--line);
+  overflow: hidden;
+  text-align: center;
+  font-family: Roboto Serif;
+}
+.menuBar ul li:nth-child(1) {
+  position: relative;
+  float: left;
+}
+.menuBar ul li:nth-child(4) {
+  float: right;
+}
+.menuBar ul li:nth-child(3) {
+  float: right;
+}
+.accountBtn{
+    position: left;
+    overflow: hidden;
+    cursor: pointer;
+    /* display: inline-block; */
+}
+.dropDownContent {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 10%;
+    left: 87%;
+  }
+  .dropDownContent a {
+    float: left;
+    color: var(--text);
+    padding: 12px 10px;
+    text-decoration: none;
+    display: block;
+    float: none;
+  }
+ .show{
+    display: block;
+ } 
+.album{
+    text-align: center;
+    padding: 30px;
+}
+.gallery{
+    text-align: center;
+}
+.galleryImages{
+    font-size: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 4px;
+    position: relative;
+    cursor: pointer;
+}
+.galleryImages Ul{
+    display: flex;
+    flex-wrap: wrap;
+}
+.galleryImages li{
+    flex: 25%;
+    max-width: 25%;
+    padding: 0 4px;
+    white-space: nowrap;
+}
+.galleryImages img{
+    /* display: block; */
+    margin-top: 8px;
+    vertical-align: middle;
+    width: 100%;
+}
+.thumbnails{
+    font-size: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 4px;
+    position: relative;
+    margin: auto;
+    width: 85%;
+    float: none;
+}
+.thumbnails ul{
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+}
+.thumbnails li{
+    flex: 10%;
+    max-width: 10%;
+    padding: 0 4px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.thumbnails img{
+    /* display: block; */
+    margin-top: 8px;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: visibility 0.25s;
+}
+.overlayVis{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: visibility 0.25s;
+}
+.overlay  * {
+    transform: translateY(0);
+    transition: transform 0.25s;
+}
+.overlayVis * {
+    transform: translateY(50px);
+    transition: transform 0.25s;
+}
+.overlay h2, p{
+    color: white;
+}
+.mainImageNav{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* background: rgba(0, 0, 0, 0.6); */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: visibility 0.25s;
+}
+.photo{
+    position: relative;
+}
+.mainImage{
+    position: relative;
+    /* height: 95%; */
+    width: 100%;
+    text-align: center;
+    display: block;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.2);
+
+}
+.mainImage img{
+    padding: 10px;
+    /* max-width: 100%; */
+    max-height: 100vh;
+    max-width: 95%; 
+    /* max-height: 95%; */
+}
+.closeBtn{
+    color: rgba(255, 255, 255, 1);
+    position: absolute;
+    top: 2px;
+    right: 0;
+    height: 50px;
+    width: 50px;
+    padding: 10px;
+    /* background: rgba(0, 0, 0, 0.6); */
+    /* border-radius: 50%; */
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+}
+.forwardButt{
+    color: rgba(255, 255, 255, 1);
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    right: 0;
+    height: 50px;
+    width: 50px;
+    /* background: rgba(0, 0, 0, 0.6); */
+    /* border-radius: 50%; */
+    background: none;
+    border: none;
+    font-size: 50px;
+    cursor: pointer;
+}
+/* .forwardButt{
+    font-size: 80px;
+    color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    right: 0;
+    height: 50px;
+    width: 50px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    border: none;
+} */
+.backButt{
+    color: rgba(255, 255, 255, 1);
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    left: 0;
+    height: 50px;
+    width: 50px;
+    /* background: rgba(0, 0, 0, 0.6); */
+    /* border-radius: 50%; */
+    background: none;
+    border: none;
+    font-size: 50px;
+    cursor: pointer;
+} 
+
+
+@media screen and (max-width: 800px) {
+    .galleryImages li{
+        flex: 50%;
+        max-width: 50%;
+    }
+}
+@media screen and (max-width: 600px) {
+    .galleryImages li{
+        flex: 100%;
+        max-width: 100%;
+    }
+}
