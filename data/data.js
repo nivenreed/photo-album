@@ -60,3 +60,74 @@ const album = {
     },
   ],
 };
+const album2 = {
+  title: `Ottilie`,
+  description: `Ottilie's first 3 month's`,
+  images: [
+    {
+      title: `Photo 1`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/album2/IMG_0020.JPG`,
+      created: 1646493300,
+      description: `OtOttilie `,
+    },
+    {
+      title: `Photo 2`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/album2/IMG_0029.JPG`,
+      created: 1646493300,
+      description: `Ottilie `,
+    },
+    {
+      title: `Photo 3`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/album2/IMG_0042.JPG`,
+      created: 1646493300,
+      description: `Ottilie `,
+    },
+    {
+      title: `Photo 4`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/album2/IMG_0047.JPG`,
+      created: 1646493300,
+      description: `Ottilie `,
+    },
+    {
+      title: `Photo 5`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/album2/IMG_0057.JPG`,
+      created: 1646493300,
+      description: `Ottilie `,
+    },
+    {
+      title: `Photo 6`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/album2/IMG_0077.JPG`,
+      created: 1646493300,
+      description: `Ottilie `,
+    },
+    {
+      title: `Photo 7`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/album2/IMG_0078.JPG`,
+      created: 1646493300,
+      description: `Ottilie `,
+    },
+    {
+      title: `Photo 8`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/album2/IMG_0090.JPG`,
+      created: 1646493300,
+      description: `Ottilie `,
+    },
+    {
+      title: `Photo 9`,
+      thumbnailSrc: './thumbnail/IMG',
+      src: `./gallery/album2/IMG_0093.JPG`,
+      created: 1646493300,
+      description: `Ottilie `,
+    },
+  ],
+};
+
+const galleryAlbums = [album, album2];
