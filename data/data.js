@@ -52,10 +52,10 @@ const album = {
       description: `After Party`,
     },
     {
-      title: `Photo `,
+      title: `Photo 8`,
       thumbnailSrc: './thumbnail/IMG',
       src: `./gallery/g0100804.JPG`,
-      created: 1507109400,
+      created: 1507193491,
       description: `After Party`,
     },
   ],
