@@ -162,7 +162,7 @@ function updateSingleImage() {
 function hashRemove() {
   window.location.hash = '';
 }
-
+// this function does nothing! I was trying to stop the gallery loading at the end of the current gallery
 function test(){
   gallery.removeChild(imagesUl);
 }
