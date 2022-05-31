@@ -152,7 +152,6 @@ function removeNextButt() {
 }
 
 function updateSingleImage() {
-  // singleImage.src = album.images[currentImageIndex].src;
   singleImage.src =
     galleryAlbums[currentAlbumIndex].images[currentImageIndex].src;
   removeNextButt();
@@ -164,6 +163,10 @@ function hashRemove() {
   window.location.hash = '';
 }
 
+function test(){
+  gallery.removeChild(imagesUl);
+}
+
 function displayHash() {
   hashArray = window.location.hash.split('/');
   const newIndex = parseInt(hashArray[3]);
@@ -172,7 +175,8 @@ function displayHash() {
     window.location.hash.includes('/') &&
     hashArray.length <= 2 &&
     newGalleryIndex < galleryAlbums.length &&
-    newGalleryIndex !== ''
+    newGalleryIndex !== '' &&
+    newGalleryIndex !== currentAlbumIndex
   ) {
     currentAlbumIndex = newGalleryIndex;
     galleryAlbums[currentAlbumIndex].images.forEach(loadAlbumImages);
@@ -186,7 +190,7 @@ function displayHash() {
     newIndex !== ''
   ) {
     currentImageIndex = newIndex;
-    // loadPageElements();
+    test();
     updateSingleImage();
     addSingleImage();
     return true;
@@ -213,7 +217,6 @@ function loadAlbumImages(images, index) {
   imagesLi.classList.add(`photo`);
   imagesImg = document.createElement('img');
   imagesImg.src = images.src;
-  // imagesImg.src = galleryAlbums[currentAlbumIndex].images.src;
   imagesImg.alt = images.title;
   imagesDesc = document.createElement('p');
   imagesDesc.classList.add('desc');
