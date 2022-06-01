@@ -13,6 +13,8 @@ let imagesImg;
 let imagesDesc;
 let imagesTitle;
 let hashArray;
+let galleryUl;
+let galleryLi;
 let currentImageIndex = 0;
 let currentAlbumIndex = 0;
 
@@ -162,26 +164,34 @@ function updateSingleImage() {
 function hashRemove() {
   window.location.hash = '';
 }
-// this function does nothing! I was trying to stop the gallery loading at the end of the current gallery
-function test(){
-  gallery.removeChild(imagesUl);
+
+function removeGalleryPhotos() {
+  const photos = document.querySelectorAll('.photo');
+  photos.forEach(i => i.remove());
+}
+
+function addGalleryPhotos (newGalleryIndex){
+  currentAlbumIndex = newGalleryIndex;
+  galleryAlbums[currentAlbumIndex].images.forEach(loadAlbumImages);
 }
 
 function displayHash() {
   hashArray = window.location.hash.split('/');
   const newIndex = parseInt(hashArray[3]);
   const newGalleryIndex = parseInt(hashArray[1]);
+
   if (
     window.location.hash.includes('/') &&
     hashArray.length <= 2 &&
     newGalleryIndex < galleryAlbums.length &&
-    newGalleryIndex !== '' &&
-    newGalleryIndex !== currentAlbumIndex
+    newGalleryIndex !== ''
   ) {
     currentAlbumIndex = newGalleryIndex;
-    galleryAlbums[currentAlbumIndex].images.forEach(loadAlbumImages);
+    removeGalleryPhotos();
+    addGalleryPhotos(newGalleryIndex);
     return true;
   }
+
   if (
     window.location.hash.includes('/photo/') &&
     hashArray.length > 2 &&
@@ -190,10 +200,14 @@ function displayHash() {
     newIndex !== ''
   ) {
     currentImageIndex = newIndex;
-    test();
+    removeGalleryPhotos();
+    addGalleryPhotos(newGalleryIndex);
     updateSingleImage();
     addSingleImage();
     return true;
+  }
+  if (window.location.hash === '') {
+    galleryAlbums.forEach(addGalleryAlbumView);
   }
   hashRemove();
 }
@@ -211,6 +225,17 @@ const backButtClick = () => {
     updateSingleImage();
   }
 };
+
+function addGalleryAlbumView(images) {
+  galleryUl = document.createElement('ul');
+  galleryLi = document.createElement('li');
+  galleryLi.textContent = images.title;
+  galleryLi.textContent = images.description;
+  galleryUl.appendChild(galleryLi);
+  document.body.appendChild(galleryUl);
+  console.log(images);
+}
+
 function loadAlbumImages(images, index) {
   albumH1.textContent = galleryAlbums[currentAlbumIndex].title;
   imagesLi = document.createElement('li');
