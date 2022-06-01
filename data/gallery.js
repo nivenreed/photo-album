@@ -7,7 +7,16 @@ let image;
 let mainImageNav;
 let imagesUl;
 let gallery;
+let albumH1;
+let imagesLi;
+let imagesImg;
+let imagesDesc;
+let imagesTitle;
+let hashArray;
+let galleryUl;
+let galleryLi;
 let currentImageIndex = 0;
+let currentAlbumIndex = 0;
 
 /**
  * helper functions
@@ -17,14 +26,15 @@ function closeMainImage() {
   imagesUl.classList.add('galleryImages');
   mainImage.removeChild(image);
   mainImage.removeChild(mainImageNav);
-  hashRemove();
+  window.location.hash = `/${currentAlbumIndex}`;
 }
 
 function setupPageElements() {
-  const albumH1 = document.createElement('h1');
-  albumH1.textContent = album.title;
+  albumH1 = document.createElement('h1');
+  albumH1.classList.add('albumTitle');
   const description = document.createElement('p');
-  description.textContent = album.description;
+  // description.textContent = album.description;
+  description.textContent = galleryAlbums[currentAlbumIndex].description;
   const picture = document.createElement('img');
 
   const myAlbum = document.createElement('div');
@@ -58,7 +68,7 @@ function setupPageElements() {
 
   gallery = document.createElement('div');
   gallery.classList.add('gallery');
-
+  // // create gallery list
   imagesUl = document.createElement('ul');
   imagesUl.classList.add('galleryImages');
 
@@ -95,7 +105,7 @@ window.onclick = function (e) {
 };
 
 function updateUrlHash() {
-  window.location.hash = `/photo/${currentImageIndex}`;
+  window.location.hash = `/${currentAlbumIndex}/photo/${currentImageIndex}`;
 }
 
 function addSingleImage() {
@@ -120,10 +130,10 @@ function addSingleImage() {
 }
 
 function changePageTitle() {
-  if (window.location.hash.includes('photo/')) {
-    document.title = `${album.title} - ${album.images[currentImageIndex].title}`;
+  if (window.location.hash.includes('/photo/')) {
+    document.title = `${galleryAlbums[currentAlbumIndex].title} - ${galleryAlbums[currentAlbumIndex].images[currentImageIndex].title}`;
   } else {
-    document.title = `${album.title}`;
+    document.title = `${galleryAlbums[currentAlbumIndex].title}`;
   }
 }
 
@@ -133,7 +143,10 @@ function removeNextButt() {
   } else {
     backButt.style.visibility = 'visible';
   }
-  if (currentImageIndex === album.images.length - 1) {
+  if (
+    currentImageIndex ===
+    galleryAlbums[currentAlbumIndex].images.length - 1
+  ) {
     forwardButt.style.visibility = 'hidden';
   } else {
     forwardButt.style.visibility = 'visible';
@@ -141,7 +154,8 @@ function removeNextButt() {
 }
 
 function updateSingleImage() {
-  singleImage.src = album.images[currentImageIndex].src;
+  singleImage.src =
+    galleryAlbums[currentAlbumIndex].images[currentImageIndex].src;
   removeNextButt();
   updateUrlHash();
   changePageTitle();
@@ -151,25 +165,55 @@ function hashRemove() {
   window.location.hash = '';
 }
 
+function removeGalleryPhotos() {
+  const photos = document.querySelectorAll('.photo');
+  photos.forEach(i => i.remove());
+}
+
+function addGalleryPhotos (newGalleryIndex){
+  currentAlbumIndex = newGalleryIndex;
+  galleryAlbums[currentAlbumIndex].images.forEach(loadAlbumImages);
+}
+
 function displayHash() {
-  const array = window.location.hash.split('/');
-  const newIndex = parseInt(array[2]);
+  hashArray = window.location.hash.split('/');
+  const newIndex = parseInt(hashArray[3]);
+  const newGalleryIndex = parseInt(hashArray[1]);
+
   if (
-    window.location.hash.includes('photo/') &&
-    newIndex < album.images.length &&
+    window.location.hash.includes('/') &&
+    hashArray.length <= 2 &&
+    newGalleryIndex < galleryAlbums.length &&
+    newGalleryIndex !== ''
+  ) {
+    currentAlbumIndex = newGalleryIndex;
+    removeGalleryPhotos();
+    addGalleryPhotos(newGalleryIndex);
+    return true;
+  }
+
+  if (
+    window.location.hash.includes('/photo/') &&
+    hashArray.length > 2 &&
+    newIndex < galleryAlbums[currentAlbumIndex].images.length &&
     newIndex >= 0 &&
     newIndex !== ''
   ) {
     currentImageIndex = newIndex;
+    removeGalleryPhotos();
+    addGalleryPhotos(newGalleryIndex);
     updateSingleImage();
     addSingleImage();
     return true;
+  }
+  if (window.location.hash === '') {
+    galleryAlbums.forEach(addGalleryAlbumView);
   }
   hashRemove();
 }
 
 const forwardButtClick = () => {
-  if (currentImageIndex < album.images.length - 1) {
+  if (currentImageIndex < galleryAlbums[currentAlbumIndex].images.length - 1) {
     currentImageIndex += 1;
     updateSingleImage();
   }
@@ -182,19 +226,30 @@ const backButtClick = () => {
   }
 };
 
-function loadAlbumImages (images, index) {
-  const imagesLi = document.createElement('li');
+function addGalleryAlbumView(images) {
+  galleryUl = document.createElement('ul');
+  galleryLi = document.createElement('li');
+  galleryLi.textContent = images.title;
+  galleryLi.textContent = images.description;
+  galleryUl.appendChild(galleryLi);
+  document.body.appendChild(galleryUl);
+  console.log(images);
+}
+
+function loadAlbumImages(images, index) {
+  albumH1.textContent = galleryAlbums[currentAlbumIndex].title;
+  imagesLi = document.createElement('li');
   imagesLi.classList.add(`photo`);
-  const imagesImg = document.createElement('img');
+  imagesImg = document.createElement('img');
   imagesImg.src = images.src;
   imagesImg.alt = images.title;
-  const imagesDesc = document.createElement('p');
+  imagesDesc = document.createElement('p');
   imagesDesc.classList.add('desc');
   imagesDesc.textContent = images.description;
-  const imagesTitle = document.createElement('h2');
+  imagesTitle = document.createElement('h2');
   imagesTitle.textContent = images.title;
   const imagesDate = document.createElement('p');
-  const date = new Date(album.images[0].created * 1000);
+  const date = new Date(images.created * 1000);
   imagesDate.textContent = date.toLocaleString('en-GB', {
     year: 'numeric',
     month: 'short',
@@ -241,7 +296,7 @@ function handleHoverOut(li) {
  * Run the page start here
  */
 setupPageElements();
-album.images.forEach(loadAlbumImages);
+
 document.body.appendChild(gallery);
 
 /**
