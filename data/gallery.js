@@ -25,10 +25,6 @@ let currentAlbumIndex = 0;
  * helper functions
  */
 
-function pathname(){
-  window.location.pathname = '/test';
-}
-
 function albumBackBtn() {
   const backBtn = document.getElementsByClassName('back');
   backBtn[0].addEventListener('click', () => {
@@ -351,7 +347,6 @@ function handleHoverOut(li) {
 /**
  * Run the page start here
  */
-pathname();
 setupPageElements();
 setupAlbumListElements();
 albumBackBtn();
