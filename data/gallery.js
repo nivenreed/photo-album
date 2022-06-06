@@ -13,20 +13,47 @@ let imagesImg;
 let imagesDesc;
 let imagesTitle;
 let hashArray;
-let galleryUl;
-let galleryLi;
+let albumListLi;
+let albumListImage;
+let albumList;
+let albumListUl;
+let albumListText;
 let currentImageIndex = 0;
 let currentAlbumIndex = 0;
 
 /**
  * helper functions
  */
+
+function pathname(){
+  window.location.pathname = '/test';
+}
+
+function albumBackBtn() {
+  const backBtn = document.getElementsByClassName('back');
+  backBtn[0].addEventListener('click', () => {
+    removeGalleryPhotos();
+    removeGalleryist();
+    addingGalleryList();
+    hashRemove();
+  });
+}
+
 function closeMainImage() {
   imagesUl.classList.remove('thumbnails');
   imagesUl.classList.add('galleryImages');
   mainImage.removeChild(image);
   mainImage.removeChild(mainImageNav);
   window.location.hash = `/${currentAlbumIndex}`;
+}
+
+function setupAlbumListElements() {
+  albumList = document.createElement('div');
+  albumList.classList.add('albumList');
+  albumListUl = document.createElement('ul');
+  albumListUl.classList.add('list');
+  albumList.appendChild(albumListUl);
+  document.body.appendChild(albumList);
 }
 
 function setupPageElements() {
@@ -108,6 +135,10 @@ function updateUrlHash() {
   window.location.hash = `/${currentAlbumIndex}/photo/${currentImageIndex}`;
 }
 
+function updateSingleUrlHash() {
+  window.location.hash = `/${currentAlbumIndex}`;
+}
+
 function addSingleImage() {
   image.classList.add('image');
   mainImageNav.classList.add('mainImageNav');
@@ -167,10 +198,10 @@ function hashRemove() {
 
 function removeGalleryPhotos() {
   const photos = document.querySelectorAll('.photo');
-  photos.forEach(i => i.remove());
+  photos.forEach((i) => i.remove());
 }
 
-function addGalleryPhotos (newGalleryIndex){
+function addGalleryPhotos(newGalleryIndex) {
   currentAlbumIndex = newGalleryIndex;
   galleryAlbums[currentAlbumIndex].images.forEach(loadAlbumImages);
 }
@@ -207,7 +238,9 @@ function displayHash() {
     return true;
   }
   if (window.location.hash === '') {
-    galleryAlbums.forEach(addGalleryAlbumView);
+    removeGalleryPhotos();
+    removeGalleryist();
+    addingGalleryList();
   }
   hashRemove();
 }
@@ -226,14 +259,26 @@ const backButtClick = () => {
   }
 };
 
-function addGalleryAlbumView(images) {
-  galleryUl = document.createElement('ul');
-  galleryLi = document.createElement('li');
-  galleryLi.textContent = images.title;
-  galleryLi.textContent = images.description;
-  galleryUl.appendChild(galleryLi);
-  document.body.appendChild(galleryUl);
-  console.log(images);
+function addingGalleryListElements(images, index) {
+  albumH1.textContent = '';
+  albumListLi = document.createElement('li');
+  albumListLi.classList.add('galleryList');
+  albumListText = document.createElement('div');
+  albumListText.classList.add('albumListText');
+  albumListText.textContent = images.title;
+  albumListImage = document.createElement('img');
+  albumListImage.src = images.images[0].src;
+  albumListImage.alt = images.images[0].title;
+  albumListLi.appendChild(albumListImage);
+  albumListLi.appendChild(albumListText);
+  albumListUl.appendChild(albumListLi);
+  // document.body.appendChild(galleryUl);
+  albumListLi.addEventListener('click', () => {
+    removeGalleryist();
+    removeGalleryPhotos();
+    addGalleryPhotos(index);
+    updateSingleUrlHash();
+  });
 }
 
 function loadAlbumImages(images, index) {
@@ -281,6 +326,17 @@ function thumbnailClick(index) {
   displayHash();
   updateUrlHash();
 }
+
+function addingGalleryList() {
+  galleryAlbums.forEach(addingGalleryListElements);
+  // document.body.appendChild(galleryUl);
+}
+
+function removeGalleryist() {
+  const list = document.querySelectorAll('.galleryList');
+  list.forEach((i) => i.remove());
+}
+
 // adding hover event listner for discription overlay
 
 function handleHover(li) {
@@ -295,8 +351,10 @@ function handleHoverOut(li) {
 /**
  * Run the page start here
  */
+pathname();
 setupPageElements();
-
+setupAlbumListElements();
+albumBackBtn();
 document.body.appendChild(gallery);
 
 /**
