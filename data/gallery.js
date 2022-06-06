@@ -30,9 +30,9 @@ function albumBackBtn() {
   backBtn[0].addEventListener('click', () => {
     if (imagesUl.classList == 'thumbnails') {
       closeMainImage();
-    }else{
+    } else {
     removeGalleryPhotos();
-    removeGalleryist();
+    removeGalleryList();
     addingGalleryList();
     hashRemove();
   }
@@ -238,7 +238,7 @@ function displayHash() {
   }
   if (window.location.hash === '') {
     removeGalleryPhotos();
-    removeGalleryist();
+    removeGalleryList();
     addingGalleryList();
   }
   hashRemove();
@@ -272,7 +272,7 @@ function addingGalleryListElements(images, index) {
   albumListLi.appendChild(albumListText);
   albumListUl.appendChild(albumListLi);
   albumListLi.addEventListener('click', () => {
-    removeGalleryist();
+    removeGalleryList();
     removeGalleryPhotos();
     addGalleryPhotos(index);
     updateSingleUrlHash();
@@ -329,7 +329,7 @@ function addingGalleryList() {
   galleryAlbums.forEach(addingGalleryListElements);
 }
 
-function removeGalleryist() {
+function removeGalleryList() {
   const list = document.querySelectorAll('.galleryList');
   list.forEach((i) => i.remove());
 }
