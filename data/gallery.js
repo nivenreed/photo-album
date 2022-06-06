@@ -28,10 +28,14 @@ let currentAlbumIndex = 0;
 function albumBackBtn() {
   const backBtn = document.getElementsByClassName('back');
   backBtn[0].addEventListener('click', () => {
+    if (imagesUl.classList == 'thumbnails') {
+      closeMainImage();
+    }else{
     removeGalleryPhotos();
     removeGalleryist();
     addingGalleryList();
     hashRemove();
+  }
   });
 }
 
@@ -40,7 +44,7 @@ function closeMainImage() {
   imagesUl.classList.add('galleryImages');
   mainImage.removeChild(image);
   mainImage.removeChild(mainImageNav);
-  window.location.hash = `/${currentAlbumIndex}`;
+  window.location.hash = `/${galleryAlbums[currentAlbumIndex].title}`;
 }
 
 function setupAlbumListElements() {
@@ -132,7 +136,6 @@ function updateUrlHash() {
 }
 
 function updateSingleUrlHash() {
-  // window.location.hash = `/${currentAlbumIndex}`;
   window.location.hash = `/${galleryAlbums[currentAlbumIndex].title}`;
 }
 
@@ -206,8 +209,9 @@ function addGalleryPhotos(newGalleryIndex) {
 function displayHash() {
   hashArray = window.location.hash.split('/');
   const newIndex = parseInt(hashArray[3]);
-  // const newGalleryIndex = parseInt(hashArray[1]);
-  const index =  galleryAlbums.findIndex(object => object.title === hashArray[1]);
+  const index = galleryAlbums.findIndex(
+    (object) => object.title === hashArray[1]
+  );
   const newGalleryIndex = parseInt(index);
   if (
     window.location.hash.includes(`/${galleryAlbums[currentAlbumIndex].title}`)
@@ -217,19 +221,6 @@ function displayHash() {
     addGalleryPhotos(newGalleryIndex);
     return true;
   }
-
-  // if (
-  //   window.location.hash.includes('/') &&
-  //   hashArray.length <= 2 &&
-  //   newGalleryIndex < galleryAlbums.length &&
-  //   newGalleryIndex !== '' 
-  //   // hashArray.includes(`${galleryAlbums[currentAlbumIndex].title}`)
-  // ) {
-  //   currentAlbumIndex = newGalleryIndex;
-  //   removeGalleryPhotos();
-  //   addGalleryPhotos(newGalleryIndex);
-  //   return true;
-  // }
 
   if (
     window.location.hash.includes('/photo/') &&
@@ -336,7 +327,6 @@ function thumbnailClick(index) {
 
 function addingGalleryList() {
   galleryAlbums.forEach(addingGalleryListElements);
-  // document.body.appendChild(galleryUl);
 }
 
 function removeGalleryist() {

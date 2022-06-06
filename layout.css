@@ -47,6 +47,9 @@ p{
 .menuBar ul li:nth-child(3) {
   float: right;
 }
+.back{
+    cursor: pointer;
+}
 .accountBtn{
     position: left;
     overflow: hidden;
