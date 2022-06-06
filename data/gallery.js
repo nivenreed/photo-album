@@ -128,11 +128,12 @@ window.onclick = function (e) {
 };
 
 function updateUrlHash() {
-  window.location.hash = `/${currentAlbumIndex}/photo/${currentImageIndex}`;
+  window.location.hash = `/${galleryAlbums[currentAlbumIndex].title}/photo/${currentImageIndex}`;
 }
 
 function updateSingleUrlHash() {
-  window.location.hash = `/${currentAlbumIndex}`;
+  // window.location.hash = `/${currentAlbumIndex}`;
+  window.location.hash = `/${galleryAlbums[currentAlbumIndex].title}`;
 }
 
 function addSingleImage() {
@@ -205,19 +206,30 @@ function addGalleryPhotos(newGalleryIndex) {
 function displayHash() {
   hashArray = window.location.hash.split('/');
   const newIndex = parseInt(hashArray[3]);
-  const newGalleryIndex = parseInt(hashArray[1]);
-
+  // const newGalleryIndex = parseInt(hashArray[1]);
+  const index =  galleryAlbums.findIndex(object => object.title === hashArray[1]);
+  const newGalleryIndex = parseInt(index);
   if (
-    window.location.hash.includes('/') &&
-    hashArray.length <= 2 &&
-    newGalleryIndex < galleryAlbums.length &&
-    newGalleryIndex !== ''
+    window.location.hash.includes(`/${galleryAlbums[currentAlbumIndex].title}`)
   ) {
     currentAlbumIndex = newGalleryIndex;
     removeGalleryPhotos();
     addGalleryPhotos(newGalleryIndex);
     return true;
   }
+
+  // if (
+  //   window.location.hash.includes('/') &&
+  //   hashArray.length <= 2 &&
+  //   newGalleryIndex < galleryAlbums.length &&
+  //   newGalleryIndex !== '' 
+  //   // hashArray.includes(`${galleryAlbums[currentAlbumIndex].title}`)
+  // ) {
+  //   currentAlbumIndex = newGalleryIndex;
+  //   removeGalleryPhotos();
+  //   addGalleryPhotos(newGalleryIndex);
+  //   return true;
+  // }
 
   if (
     window.location.hash.includes('/photo/') &&
@@ -268,7 +280,6 @@ function addingGalleryListElements(images, index) {
   albumListLi.appendChild(albumListImage);
   albumListLi.appendChild(albumListText);
   albumListUl.appendChild(albumListLi);
-  // document.body.appendChild(galleryUl);
   albumListLi.addEventListener('click', () => {
     removeGalleryist();
     removeGalleryPhotos();
