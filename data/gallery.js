@@ -44,7 +44,7 @@ function closeMainImage() {
   imagesUl.classList.add('galleryImages');
   mainImage.removeChild(image);
   mainImage.removeChild(mainImageNav);
-  window.location.hash = `/${galleryAlbums[currentAlbumIndex].title}`;
+  window.location.hash = `/${galleryAlbums[currentAlbumIndex].slug}`;
 }
 
 function setupAlbumListElements() {
@@ -132,11 +132,11 @@ window.onclick = function (e) {
 };
 
 function updateUrlHash() {
-  window.location.hash = `/${galleryAlbums[currentAlbumIndex].title}/photo/${currentImageIndex}`;
+  window.location.hash = `/${galleryAlbums[currentAlbumIndex].slug}/photo/${currentImageIndex}`;
 }
 
 function updateSingleUrlHash() {
-  window.location.hash = `/${galleryAlbums[currentAlbumIndex].title}`;
+  window.location.hash = `/${galleryAlbums[currentAlbumIndex].slug}`;
 }
 
 function addSingleImage() {
@@ -210,11 +210,11 @@ function displayHash() {
   hashArray = window.location.hash.split('/');
   const newIndex = parseInt(hashArray[3]);
   const index = galleryAlbums.findIndex(
-    (object) => object.title === hashArray[1]
+    (object) => object.slug === hashArray[1]
   );
   const newGalleryIndex = parseInt(index);
   if (
-    window.location.hash.includes(`/${galleryAlbums[currentAlbumIndex].title}`)
+    window.location.hash.includes(`/${galleryAlbums[currentAlbumIndex].slug}`)
   ) {
     currentAlbumIndex = newGalleryIndex;
     removeGalleryPhotos();
