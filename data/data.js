@@ -1,5 +1,6 @@
 const album = {
   title: `Bali`,
+  slug:  `will-and-erin-bali-wedding`,
   description: `Trip to Bali for Will & Erin's Wedding`,
   images: [
     {
@@ -62,6 +63,7 @@ const album = {
 };
 const album2 = {
   title: `Ottilie`,
+  slug: `ottilie-first-few-months`,
   description: `Ottilie's first 3 month's`,
   images: [
     {
