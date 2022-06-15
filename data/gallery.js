@@ -20,7 +20,7 @@ let albumListUl;
 let albumListText;
 let currentImageIndex = 0;
 let currentAlbumIndex = 0;
-
+let galleryAlbums = [];
 /**
  * helper functions
  */
@@ -40,11 +40,17 @@ function albumBackBtn() {
 }
 
 function closeMainImage() {
-  imagesUl.classList.remove('thumbnails');
-  imagesUl.classList.add('galleryImages');
-  mainImage.removeChild(image);
-  mainImage.removeChild(mainImageNav);
-  window.location.hash = `/${galleryAlbums[currentAlbumIndex].slug}`;
+  const closeButton = document.getElementsByClassName('closeBtn');
+  // const imageElem = document.getElementsByClassName('mainImage');
+  closeButton[0].addEventListener('click', () => {
+    imagesUl.classList.remove('thumbnails');
+    imagesUl.classList.add('galleryImages');
+    // const imageElem = document.querySelectorAll('.image');
+    // imageElem.remove();
+    mainImage.removeChild(image);
+    mainImage.removeChild(mainImageNav);
+    window.location.hash = `/${galleryAlbums[currentAlbumIndex].fields.slug}`;
+  });
 }
 
 function setupAlbumListElements() {
@@ -60,8 +66,7 @@ function setupPageElements() {
   albumH1 = document.createElement('h1');
   albumH1.classList.add('albumTitle');
   const description = document.createElement('p');
-  // description.textContent = album.description;
-  description.textContent = galleryAlbums[currentAlbumIndex].description;
+  // description.textContent = galleryAlbums[currentAlbumIndex].fields.title;
   const picture = document.createElement('img');
 
   const myAlbum = document.createElement('div');
@@ -111,6 +116,7 @@ function setupPageElements() {
   accountBtn[0].addEventListener('click', () => {
     toggleAccountShow(accountDropDown);
   });
+  console.log('setUpPageEleElments Has Run');
 }
 
 function toggleAccountShow(element) {
@@ -132,11 +138,11 @@ window.onclick = function (e) {
 };
 
 function updateUrlHash() {
-  window.location.hash = `/${galleryAlbums[currentAlbumIndex].slug}/photo/${currentImageIndex}`;
+  window.location.hash = `/${galleryAlbums[currentAlbumIndex].fields.slug}/photo/${currentImageIndex}`;
 }
 
 function updateSingleUrlHash() {
-  window.location.hash = `/${galleryAlbums[currentAlbumIndex].slug}`;
+  window.location.hash = `/${galleryAlbums[currentAlbumIndex].fields.slug}`;
 }
 
 function addSingleImage() {
@@ -158,13 +164,16 @@ function addSingleImage() {
   mainImage.appendChild(mainImageNav);
   imagesUl.classList.remove('galleryImages');
   imagesUl.classList.add('thumbnails');
+  closeMainImage();
+  forwardButtClick();
+  backButtClick();
 }
 
 function changePageTitle() {
   if (window.location.hash.includes('/photo/')) {
-    document.title = `${galleryAlbums[currentAlbumIndex].title} - ${galleryAlbums[currentAlbumIndex].images[currentImageIndex].title}`;
+    document.title = `${galleryAlbums[currentAlbumIndex].fields.title} - ${galleryAlbums[currentAlbumIndex].fields.images[currentImageIndex].fields.title}`;
   } else {
-    document.title = `${galleryAlbums[currentAlbumIndex].title}`;
+    document.title = `${galleryAlbums[currentAlbumIndex].fields.title}`;
   }
 }
 
@@ -176,7 +185,7 @@ function removeNextButt() {
   }
   if (
     currentImageIndex ===
-    galleryAlbums[currentAlbumIndex].images.length - 1
+    galleryAlbums[currentAlbumIndex].fields.images.length - 1
   ) {
     forwardButt.style.visibility = 'hidden';
   } else {
@@ -185,8 +194,7 @@ function removeNextButt() {
 }
 
 function updateSingleImage() {
-  singleImage.src =
-    galleryAlbums[currentAlbumIndex].images[currentImageIndex].src;
+  singleImage.src = `https://${galleryAlbums[currentAlbumIndex].fields.images[currentImageIndex].fields.file.url}`;
   removeNextButt();
   updateUrlHash();
   changePageTitle();
@@ -203,18 +211,24 @@ function removeGalleryPhotos() {
 
 function addGalleryPhotos(newGalleryIndex) {
   currentAlbumIndex = newGalleryIndex;
-  galleryAlbums[currentAlbumIndex].images.forEach(loadAlbumImages);
+  console.log(newGalleryIndex);
+  galleryAlbums[currentAlbumIndex].fields.images.forEach(loadAlbumImages);
 }
 
 function displayHash() {
   hashArray = window.location.hash.split('/');
+  // set the photo id
   const newIndex = parseInt(hashArray[3]);
+  console.log('albumIndex', newIndex, 'albums', galleryAlbums);
+
   const index = galleryAlbums.findIndex(
-    (object) => object.slug === hashArray[1]
+    (object) => object.fields.slug === hashArray[1]
   );
+  console.log('hashAlbumIndex', index);
   const newGalleryIndex = parseInt(index);
+  console.log('newGalleryIndex', newGalleryIndex);
   if (
-    window.location.hash.includes(`/${galleryAlbums[currentAlbumIndex].slug}`)
+    window.location.hash.includes(`/${galleryAlbums[currentAlbumIndex].fields.slug}`)
   ) {
     currentAlbumIndex = newGalleryIndex;
     removeGalleryPhotos();
@@ -225,7 +239,7 @@ function displayHash() {
   if (
     window.location.hash.includes('/photo/') &&
     hashArray.length > 2 &&
-    newIndex < galleryAlbums[currentAlbumIndex].images.length &&
+    newIndex < galleryAlbums[currentAlbumIndex].fields.images.length &&
     newIndex >= 0 &&
     newIndex !== ''
   ) {
@@ -245,17 +259,26 @@ function displayHash() {
 }
 
 const forwardButtClick = () => {
-  if (currentImageIndex < galleryAlbums[currentAlbumIndex].images.length - 1) {
-    currentImageIndex += 1;
-    updateSingleImage();
-  }
+  const forwardBtn = document.getElementsByClassName('forwardButt')
+  forwardBtn[0].addEventListener('click', () => {
+    if (
+      currentImageIndex <
+      galleryAlbums[currentAlbumIndex].fields.images.length - 1
+    ) {
+      currentImageIndex += 1;
+      updateSingleImage();
+    }
+  });
 };
 
 const backButtClick = () => {
-  if (currentImageIndex > 0) {
-    currentImageIndex -= 1;
-    updateSingleImage();
-  }
+  const backBtn = document.getElementsByClassName('backButt')
+  backBtn[0].addEventListener('click', () => {
+    if (currentImageIndex > 0) {
+      currentImageIndex -= 1;
+      updateSingleImage();
+    }
+  });
 };
 
 function addingGalleryListElements(images, index) {
@@ -264,10 +287,10 @@ function addingGalleryListElements(images, index) {
   albumListLi.classList.add('galleryList');
   albumListText = document.createElement('div');
   albumListText.classList.add('albumListText');
-  albumListText.textContent = images.title;
+  albumListText.textContent = images.fields.title;
   albumListImage = document.createElement('img');
-  albumListImage.src = images.images[0].src;
-  albumListImage.alt = images.images[0].title;
+  albumListImage.src = `https://${images.fields.images[0].fields.file.url}`;
+  albumListImage.alt = images.fields.title;
   albumListLi.appendChild(albumListImage);
   albumListLi.appendChild(albumListText);
   albumListUl.appendChild(albumListLi);
@@ -280,19 +303,19 @@ function addingGalleryListElements(images, index) {
 }
 
 function loadAlbumImages(images, index) {
-  albumH1.textContent = galleryAlbums[currentAlbumIndex].title;
+  albumH1.textContent = galleryAlbums[currentAlbumIndex].fields.title;
   imagesLi = document.createElement('li');
   imagesLi.classList.add(`photo`);
   imagesImg = document.createElement('img');
-  imagesImg.src = images.src;
-  imagesImg.alt = images.title;
+  imagesImg.src = `https://${images.fields.file.url}`;
+  imagesImg.alt = images.fields.title;
   imagesDesc = document.createElement('p');
   imagesDesc.classList.add('desc');
-  imagesDesc.textContent = images.description;
+  imagesDesc.textContent = images.fields.description;
   imagesTitle = document.createElement('h2');
-  imagesTitle.textContent = images.title;
+  imagesTitle.textContent = images.fields.title;
   const imagesDate = document.createElement('p');
-  const date = new Date(images.created * 1000);
+  const date = new Date(images.sys.createdAt * 1000);
   imagesDate.textContent = date.toLocaleString('en-GB', {
     year: 'numeric',
     month: 'short',
@@ -348,16 +371,28 @@ function handleHoverOut(li) {
 /**
  * Run the page start here
  */
-setupPageElements();
-setupAlbumListElements();
+// setupPageElements();
+// setupAlbumListElements();
 albumBackBtn();
-document.body.appendChild(gallery);
+// closeMainImage();
+// document.body.appendChild(gallery);
 
 /**
  * event listners
  */
 window.addEventListener('hashchange', displayHash);
-window.addEventListener('DOMContentLoaded', displayHash);
-forwardButt.addEventListener('click', forwardButtClick);
-backButt.addEventListener('click', backButtClick);
-closeBtn.addEventListener('click', closeMainImage);
+// window.addEventListener('DOMContentLoaded', displayHash);
+// forwardButt.addEventListener('click', forwardButtClick);
+// backButt.addEventListener('click', backButtClick);
+// closeBtn.addEventListener('click', closeMainImage);
+
+client.getEntries({ content_type: 'album'}).then(function (entries) {
+  entries.items.forEach((entery) => console.log(entery.fields));
+  galleryAlbums = entries.items;
+  // window.addEventListener('hashchange', displayHash);
+  // window.addEventListener('DOMContentLoaded', displayHash);
+  setupPageElements();
+  setupAlbumListElements();
+  displayHash();
+  document.body.appendChild(gallery);
+});

@@ -132,4 +132,4 @@ const album2 = {
   ],
 };
 
-const galleryAlbums = [album, album2];
+const galleryAlbumsStatic = [album, album2];
