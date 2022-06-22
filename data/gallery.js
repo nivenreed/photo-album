@@ -20,56 +20,29 @@ let albumListUl;
 let albumListText;
 let currentImageIndex = 0;
 let currentAlbumIndex = 0;
-
+let galleryAlbums = [];
 /**
  * helper functions
  */
-
+ 
+// the main page back button
 function albumBackBtn() {
   const backBtn = document.getElementsByClassName('back');
   backBtn[0].addEventListener('click', () => {
     if (imagesUl.classList == 'thumbnails') {
-      closeMainImage();
+      handleCloseButton();
+      updateSingleUrlHash();
     } else {
-    removeGalleryPhotos();
-    removeGalleryList();
-    addingGalleryList();
-    hashRemove();
-  }
+      removeGalleryPhotos();
+      removeGalleryList();
+      addingGalleryList();
+      hashRemove();
+    }
   });
 }
 
-function closeMainImage() {
-  imagesUl.classList.remove('thumbnails');
-  imagesUl.classList.add('galleryImages');
-  mainImage.removeChild(image);
-  mainImage.removeChild(mainImageNav);
-  window.location.hash = `/${galleryAlbums[currentAlbumIndex].slug}`;
-}
-
-function setupAlbumListElements() {
-  albumList = document.createElement('div');
-  albumList.classList.add('albumList');
-  albumListUl = document.createElement('ul');
-  albumListUl.classList.add('list');
-  albumList.appendChild(albumListUl);
-  document.body.appendChild(albumList);
-}
-
-function setupPageElements() {
-  albumH1 = document.createElement('h1');
-  albumH1.classList.add('albumTitle');
-  const description = document.createElement('p');
-  // description.textContent = album.description;
-  description.textContent = galleryAlbums[currentAlbumIndex].description;
-  const picture = document.createElement('img');
-
-  const myAlbum = document.createElement('div');
-  myAlbum.classList.add('album');
-  myAlbum.appendChild(albumH1);
-  myAlbum.appendChild(picture);
-  myAlbum.appendChild(description);
-
+// create the account drop down elements /
+function accountDropDownElements() {
   const accountBtn = document.getElementsByClassName('accountBtn');
   const accountDropDown = document.createElement('div');
   const signIn = document.createElement('a');
@@ -91,6 +64,67 @@ function setupPageElements() {
   accountDropDown.appendChild(logOut);
   document.querySelector('.accountBtn').appendChild(accountDropDown);
 
+  accountBtn[0].addEventListener('click', () => {
+    toggleAccountShow(accountDropDown);
+  });
+}
+
+// show acoount drop down menu
+function toggleAccountShow(element) {
+  element.classList.toggle('show');
+}
+
+// closes account dropdown when clicking anywhere on page
+window.onclick = function (e) {
+  if (!e.target.matches('.accountBtn')) {
+    const dropdowns = document.getElementsByClassName('dropDownContent');
+    for (let i = 0; i < dropdowns.length; i++) {
+      const openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+};
+
+// gets the image close button icon and the click event
+function closeMainImage() {
+  const closeButton = document.getElementsByClassName('closeBtn');
+  closeButton[0].addEventListener('click', handleCloseButton);
+}
+
+// closes the single image view and returns back to the album
+function handleCloseButton() {
+  imagesUl.classList.remove('thumbnails');
+  imagesUl.classList.add('galleryImages');
+  mainImage.removeChild(image);
+  mainImage.removeChild(mainImageNav);
+  window.location.hash = `/${galleryAlbums[currentAlbumIndex].fields.slug}`;
+}
+
+// set up the multiple ablum collection list DOM elements
+function setupAlbumListElements() {
+  albumList = document.createElement('div');
+  albumList.classList.add('albumList');
+  albumListUl = document.createElement('ul');
+  albumListUl.classList.add('list');
+  albumList.appendChild(albumListUl);
+  document.body.appendChild(albumList);
+}
+
+// set setup the single album DOM elements
+function setupPageElements() {
+  albumH1 = document.createElement('h1');
+  albumH1.classList.add('albumTitle');
+  const description = document.createElement('p');
+  const picture = document.createElement('img');
+
+  const myAlbum = document.createElement('div');
+  myAlbum.classList.add('album');
+  myAlbum.appendChild(albumH1);
+  myAlbum.appendChild(picture);
+  myAlbum.appendChild(description);
+
   document.body.appendChild(myAlbum);
 
   gallery = document.createElement('div');
@@ -107,38 +141,18 @@ function setupPageElements() {
   backButt = document.createElement('button');
   forwardButt = document.createElement('button');
   document.body.appendChild(mainImage);
-
-  accountBtn[0].addEventListener('click', () => {
-    toggleAccountShow(accountDropDown);
-  });
 }
-
-function toggleAccountShow(element) {
-  element.classList.toggle('show');
-}
-
-// closes dropdown if click anywhere on page
-window.onclick = function (e) {
-  if (!e.target.matches('.accountBtn')) {
-    const dropdowns = document.getElementsByClassName('dropDownContent');
-    let i;
-    for (i = 0; i < dropdowns.length; i++) {
-      const openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-};
-
+// sets the url hash location for the single image view
 function updateUrlHash() {
-  window.location.hash = `/${galleryAlbums[currentAlbumIndex].slug}/photo/${currentImageIndex}`;
+  window.location.hash = `/${galleryAlbums[currentAlbumIndex].fields.slug}/photo/${currentImageIndex}`;
 }
 
+// sets the url hash location for the album view
 function updateSingleUrlHash() {
-  window.location.hash = `/${galleryAlbums[currentAlbumIndex].slug}`;
+  window.location.hash = `/${galleryAlbums[currentAlbumIndex].fields.slug}`;
 }
 
+// adding the single image view DOM elements
 function addSingleImage() {
   image.classList.add('image');
   mainImageNav.classList.add('mainImageNav');
@@ -158,16 +172,20 @@ function addSingleImage() {
   mainImage.appendChild(mainImageNav);
   imagesUl.classList.remove('galleryImages');
   imagesUl.classList.add('thumbnails');
+  closeMainImage();
+  forwardButtClick();
+  backButtClick();
 }
 
 function changePageTitle() {
   if (window.location.hash.includes('/photo/')) {
-    document.title = `${galleryAlbums[currentAlbumIndex].title} - ${galleryAlbums[currentAlbumIndex].images[currentImageIndex].title}`;
+    document.title = `${galleryAlbums[currentAlbumIndex].fields.title} - ${galleryAlbums[currentAlbumIndex].fields.images[currentImageIndex].fields.title}`;
   } else {
-    document.title = `${galleryAlbums[currentAlbumIndex].title}`;
+    document.title = `${galleryAlbums[currentAlbumIndex].fields.title}`;
   }
 }
 
+// making the single image next/previous button visable or not
 function removeNextButt() {
   if (currentImageIndex === 0) {
     backButt.style.visibility = 'hidden';
@@ -176,7 +194,7 @@ function removeNextButt() {
   }
   if (
     currentImageIndex ===
-    galleryAlbums[currentAlbumIndex].images.length - 1
+    galleryAlbums[currentAlbumIndex].fields.images.length - 1
   ) {
     forwardButt.style.visibility = 'hidden';
   } else {
@@ -184,58 +202,77 @@ function removeNextButt() {
   }
 }
 
+// sets the single image file location
 function updateSingleImage() {
-  singleImage.src =
-    galleryAlbums[currentAlbumIndex].images[currentImageIndex].src;
+  singleImage.src = `https:${galleryAlbums[currentAlbumIndex].fields.images[currentImageIndex].fields.file.url}`;
   removeNextButt();
   updateUrlHash();
   changePageTitle();
 }
 
+// rests the url hash
 function hashRemove() {
   window.location.hash = '';
 }
 
+// removes the current album view photos
 function removeGalleryPhotos() {
   const photos = document.querySelectorAll('.photo');
   photos.forEach((i) => i.remove());
 }
 
+// looping over all the album photos to add them the page
 function addGalleryPhotos(newGalleryIndex) {
   currentAlbumIndex = newGalleryIndex;
-  galleryAlbums[currentAlbumIndex].images.forEach(loadAlbumImages);
+  galleryAlbums[currentAlbumIndex].fields.images.forEach(loadAlbumImages);
 }
 
+function isPhotoInHash(newPhotoIndex, newAlbumIndex) {
+  return (
+    window.location.hash.includes('/photo/') &&
+    hashArray.length > 2 &&
+    newPhotoIndex < galleryAlbums[newAlbumIndex].fields.images.length &&
+    newPhotoIndex >= 0 &&
+    newPhotoIndex !== ''
+  );
+}
+
+function isGalleryIndexInHash(newGalleryIndex) {
+  return (
+    newGalleryIndex >= 0 &&
+    window.location.hash.includes(
+      `#/${galleryAlbums[newGalleryIndex].fields.slug}`
+    )
+  );
+}
+
+// gets the album index and photo index from the url
 function displayHash() {
   hashArray = window.location.hash.split('/');
-  const newIndex = parseInt(hashArray[3]);
+  // set the photo id
+  const newPhotoIndex = parseInt(hashArray[3]);
+
   const index = galleryAlbums.findIndex(
-    (object) => object.slug === hashArray[1]
+    (object) => object.fields.slug === hashArray[1]
   );
   const newGalleryIndex = parseInt(index);
-  if (
-    window.location.hash.includes(`/${galleryAlbums[currentAlbumIndex].slug}`)
-  ) {
+
+  if (isPhotoInHash(newPhotoIndex, newGalleryIndex)) {
+    currentImageIndex = newPhotoIndex;
+    removeGalleryPhotos();
+    addGalleryPhotos(newGalleryIndex);
+    removeGalleryList();
+    updateSingleImage();
+    addSingleImage();
+    return true;
+  }
+  if (isGalleryIndexInHash(newGalleryIndex)) {
     currentAlbumIndex = newGalleryIndex;
     removeGalleryPhotos();
     addGalleryPhotos(newGalleryIndex);
     return true;
   }
 
-  if (
-    window.location.hash.includes('/photo/') &&
-    hashArray.length > 2 &&
-    newIndex < galleryAlbums[currentAlbumIndex].images.length &&
-    newIndex >= 0 &&
-    newIndex !== ''
-  ) {
-    currentImageIndex = newIndex;
-    removeGalleryPhotos();
-    addGalleryPhotos(newGalleryIndex);
-    updateSingleImage();
-    addSingleImage();
-    return true;
-  }
   if (window.location.hash === '') {
     removeGalleryPhotos();
     removeGalleryList();
@@ -245,29 +282,39 @@ function displayHash() {
 }
 
 const forwardButtClick = () => {
-  if (currentImageIndex < galleryAlbums[currentAlbumIndex].images.length - 1) {
-    currentImageIndex += 1;
-    updateSingleImage();
-  }
+  const forwardBtn = document.getElementsByClassName('forwardButt');
+  forwardBtn[0].addEventListener('click', () => {
+    if (
+      currentImageIndex <
+      galleryAlbums[currentAlbumIndex].fields.images.length - 1
+    ) {
+      currentImageIndex += 1;
+      updateSingleImage();
+    }
+  });
 };
 
 const backButtClick = () => {
-  if (currentImageIndex > 0) {
-    currentImageIndex -= 1;
-    updateSingleImage();
-  }
+  const backBtn = document.getElementsByClassName('backButt');
+  backBtn[0].addEventListener('click', () => {
+    if (currentImageIndex > 0) {
+      currentImageIndex -= 1;
+      updateSingleImage();
+    }
+  });
 };
 
+// adding the list of multiple gallerys and adding the click to display the single album
 function addingGalleryListElements(images, index) {
   albumH1.textContent = '';
   albumListLi = document.createElement('li');
   albumListLi.classList.add('galleryList');
   albumListText = document.createElement('div');
   albumListText.classList.add('albumListText');
-  albumListText.textContent = images.title;
+  albumListText.textContent = images.fields.title;
   albumListImage = document.createElement('img');
-  albumListImage.src = images.images[0].src;
-  albumListImage.alt = images.images[0].title;
+  albumListImage.src = `https:${images.fields.images[0].fields.file.url}`;
+  albumListImage.alt = images.fields.title;
   albumListLi.appendChild(albumListImage);
   albumListLi.appendChild(albumListText);
   albumListUl.appendChild(albumListLi);
@@ -279,20 +326,21 @@ function addingGalleryListElements(images, index) {
   });
 }
 
+// loading the single album data and adding the single image view click
 function loadAlbumImages(images, index) {
-  albumH1.textContent = galleryAlbums[currentAlbumIndex].title;
+  albumH1.textContent = galleryAlbums[currentAlbumIndex].fields.title;
   imagesLi = document.createElement('li');
   imagesLi.classList.add(`photo`);
   imagesImg = document.createElement('img');
-  imagesImg.src = images.src;
-  imagesImg.alt = images.title;
+  imagesImg.src = `https:${images.fields.file.url}`;
+  imagesImg.alt = images.fields.title;
   imagesDesc = document.createElement('p');
   imagesDesc.classList.add('desc');
-  imagesDesc.textContent = images.description;
+  imagesDesc.textContent = images.fields.description;
   imagesTitle = document.createElement('h2');
-  imagesTitle.textContent = images.title;
+  imagesTitle.textContent = images.fields.title;
   const imagesDate = document.createElement('p');
-  const date = new Date(images.created * 1000);
+  const date = new Date(images.sys.createdAt);
   imagesDate.textContent = date.toLocaleString('en-GB', {
     year: 'numeric',
     month: 'short',
@@ -319,8 +367,6 @@ function loadAlbumImages(images, index) {
 
 function thumbnailClick(index) {
   currentImageIndex = index;
-  updateSingleImage();
-  addSingleImage();
   displayHash();
   updateUrlHash();
 }
@@ -348,16 +394,19 @@ function handleHoverOut(li) {
 /**
  * Run the page start here
  */
-setupPageElements();
-setupAlbumListElements();
 albumBackBtn();
-document.body.appendChild(gallery);
+accountDropDownElements();
 
 /**
  * event listners
  */
+
 window.addEventListener('hashchange', displayHash);
-window.addEventListener('DOMContentLoaded', displayHash);
-forwardButt.addEventListener('click', forwardButtClick);
-backButt.addEventListener('click', backButtClick);
-closeBtn.addEventListener('click', closeMainImage);
+
+client.getEntries({ content_type: 'album' }).then((entries) => {
+  galleryAlbums = entries.items;
+  setupPageElements();
+  setupAlbumListElements();
+  displayHash();
+  document.body.appendChild(gallery);
+});
