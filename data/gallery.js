@@ -25,34 +25,39 @@ let galleryAlbums = [];
  * helper functions
  */
 
+// the main page back button
 function albumBackBtn() {
   const backBtn = document.getElementsByClassName('back');
   backBtn[0].addEventListener('click', () => {
     if (imagesUl.classList == 'thumbnails') {
-      closeMainImage();
+      console.log('imagesUl == thumbnails');
+      handleCloseButton();
+      updateSingleUrlHash();
     } else {
-    removeGalleryPhotos();
-    removeGalleryList();
-    addingGalleryList();
-    hashRemove();
-  }
+      removeGalleryPhotos();
+      removeGalleryList();
+      addingGalleryList();
+      hashRemove();
+    }
   });
 }
 
+// gets the image close button icon and the click event
 function closeMainImage() {
   const closeButton = document.getElementsByClassName('closeBtn');
-  // const imageElem = document.getElementsByClassName('mainImage');
-  closeButton[0].addEventListener('click', () => {
-    imagesUl.classList.remove('thumbnails');
-    imagesUl.classList.add('galleryImages');
-    // const imageElem = document.querySelectorAll('.image');
-    // imageElem.remove();
-    mainImage.removeChild(image);
-    mainImage.removeChild(mainImageNav);
-    window.location.hash = `/${galleryAlbums[currentAlbumIndex].fields.slug}`;
-  });
+  closeButton[0].addEventListener('click', handleCloseButton);
 }
 
+// closes the single image view and returns back to the album
+function handleCloseButton() {
+  imagesUl.classList.remove('thumbnails');
+  imagesUl.classList.add('galleryImages');
+  mainImage.removeChild(image);
+  mainImage.removeChild(mainImageNav);
+  window.location.hash = `/${galleryAlbums[currentAlbumIndex].fields.slug}`;
+}
+
+// set up the multiple ablum collection list DOM elements
 function setupAlbumListElements() {
   albumList = document.createElement('div');
   albumList.classList.add('albumList');
@@ -62,11 +67,11 @@ function setupAlbumListElements() {
   document.body.appendChild(albumList);
 }
 
+// set setup the single album DOM elements
 function setupPageElements() {
   albumH1 = document.createElement('h1');
   albumH1.classList.add('albumTitle');
   const description = document.createElement('p');
-  // description.textContent = galleryAlbums[currentAlbumIndex].fields.title;
   const picture = document.createElement('img');
 
   const myAlbum = document.createElement('div');
@@ -75,6 +80,26 @@ function setupPageElements() {
   myAlbum.appendChild(picture);
   myAlbum.appendChild(description);
 
+  document.body.appendChild(myAlbum);
+
+  gallery = document.createElement('div');
+  gallery.classList.add('gallery');
+  // // create gallery list
+  imagesUl = document.createElement('ul');
+  imagesUl.classList.add('galleryImages');
+
+  mainImage = document.createElement('div');
+  image = document.createElement('div');
+  singleImage = document.createElement('img');
+  closeBtn = document.createElement('button');
+  mainImageNav = document.createElement('div');
+  backButt = document.createElement('button');
+  forwardButt = document.createElement('button');
+  document.body.appendChild(mainImage);
+}
+
+// create the account drop down elements
+function accountDropDownElements() {
   const accountBtn = document.getElementsByClassName('accountBtn');
   const accountDropDown = document.createElement('div');
   const signIn = document.createElement('a');
@@ -96,34 +121,17 @@ function setupPageElements() {
   accountDropDown.appendChild(logOut);
   document.querySelector('.accountBtn').appendChild(accountDropDown);
 
-  document.body.appendChild(myAlbum);
-
-  gallery = document.createElement('div');
-  gallery.classList.add('gallery');
-  // // create gallery list
-  imagesUl = document.createElement('ul');
-  imagesUl.classList.add('galleryImages');
-
-  mainImage = document.createElement('div');
-  image = document.createElement('div');
-  singleImage = document.createElement('img');
-  closeBtn = document.createElement('button');
-  mainImageNav = document.createElement('div');
-  backButt = document.createElement('button');
-  forwardButt = document.createElement('button');
-  document.body.appendChild(mainImage);
-
   accountBtn[0].addEventListener('click', () => {
     toggleAccountShow(accountDropDown);
   });
-  console.log('setUpPageEleElments Has Run');
 }
 
+// show acoount drop down menu
 function toggleAccountShow(element) {
   element.classList.toggle('show');
 }
 
-// closes dropdown if click anywhere on page
+// closes account dropdown when clicking anywhere on page
 window.onclick = function (e) {
   if (!e.target.matches('.accountBtn')) {
     const dropdowns = document.getElementsByClassName('dropDownContent');
@@ -137,14 +145,19 @@ window.onclick = function (e) {
   }
 };
 
+// sets the url hash location for the single image view
 function updateUrlHash() {
+  console.log('updateUrlHash has run');
   window.location.hash = `/${galleryAlbums[currentAlbumIndex].fields.slug}/photo/${currentImageIndex}`;
 }
 
+// sets the url hash location for the album view
 function updateSingleUrlHash() {
+  console.log('updateSingleUrlHash has run');
   window.location.hash = `/${galleryAlbums[currentAlbumIndex].fields.slug}`;
 }
 
+// adding the single image view DOM elements
 function addSingleImage() {
   image.classList.add('image');
   mainImageNav.classList.add('mainImageNav');
@@ -177,6 +190,7 @@ function changePageTitle() {
   }
 }
 
+// making the single image next/previous button visable or not
 function removeNextButt() {
   if (currentImageIndex === 0) {
     backButt.style.visibility = 'hidden';
@@ -193,6 +207,7 @@ function removeNextButt() {
   }
 }
 
+// sets the single image file location
 function updateSingleImage() {
   singleImage.src = `https://${galleryAlbums[currentAlbumIndex].fields.images[currentImageIndex].fields.file.url}`;
   removeNextButt();
@@ -200,57 +215,87 @@ function updateSingleImage() {
   changePageTitle();
 }
 
+// rests the url hash
 function hashRemove() {
   window.location.hash = '';
 }
 
+// removes the current album view photos
 function removeGalleryPhotos() {
   const photos = document.querySelectorAll('.photo');
   photos.forEach((i) => i.remove());
 }
 
+// looping over all the album photos to add them the page
 function addGalleryPhotos(newGalleryIndex) {
   currentAlbumIndex = newGalleryIndex;
-  console.log(newGalleryIndex);
+  console.log('addGalleryPhotos', newGalleryIndex);
   galleryAlbums[currentAlbumIndex].fields.images.forEach(loadAlbumImages);
+  // updateSingleUrlHash();
 }
 
+function isPhotoInHash(hashArray, newPhotoIndex, newAlbumIndex){
+return window.location.hash.includes('/photo/') &&
+    hashArray.length > 2 &&
+    newPhotoIndex < galleryAlbums[newAlbumIndex].fields.images.length &&
+    newPhotoIndex >= 0 &&
+    newPhotoIndex !== ''
+  }
+
+function  isGalleryIndexInHash(newGalleryIndex){
+ return newGalleryIndex >= 0 && 
+ window.location.hash.includes(
+    `#/${galleryAlbums[newGalleryIndex].fields.slug}`)
+}
+
+// gets the album index and photo index from the url
 function displayHash() {
   hashArray = window.location.hash.split('/');
   // set the photo id
-  const newIndex = parseInt(hashArray[3]);
-  console.log('albumIndex', newIndex, 'albums', galleryAlbums);
+  const newPhotoIndex = parseInt(hashArray[3]);
+  console.log('albumIndex', newPhotoIndex, 'albums', galleryAlbums);
 
   const index = galleryAlbums.findIndex(
     (object) => object.fields.slug === hashArray[1]
   );
   console.log('hashAlbumIndex', index);
   const newGalleryIndex = parseInt(index);
-  console.log('newGalleryIndex', newGalleryIndex);
+  
+  if (isPhotoInHash(hashArray, newPhotoIndex, newGalleryIndex)) {
+
+    console.log('the photo hash running');
+    currentImageIndex = newPhotoIndex;
+    removeGalleryPhotos();
+    addGalleryPhotos(newGalleryIndex);
+    removeGalleryList();
+    updateSingleImage();
+    addSingleImage();
+    return true;
+  }
   if (
-    window.location.hash.includes(`/${galleryAlbums[currentAlbumIndex].fields.slug}`)
-  ) {
+    isGalleryIndexInHash(newGalleryIndex)
+    )
+   {
+    console.log('the album hash is working');
     currentAlbumIndex = newGalleryIndex;
     removeGalleryPhotos();
     addGalleryPhotos(newGalleryIndex);
     return true;
   }
 
-  if (
-    window.location.hash.includes('/photo/') &&
-    hashArray.length > 2 &&
-    newIndex < galleryAlbums[currentAlbumIndex].fields.images.length &&
-    newIndex >= 0 &&
-    newIndex !== ''
-  ) {
-    currentImageIndex = newIndex;
-    removeGalleryPhotos();
-    addGalleryPhotos(newGalleryIndex);
-    updateSingleImage();
-    addSingleImage();
-    return true;
-  }
+  // if (
+  //   window.location.hash == `#/${galleryAlbums[currentAlbumIndex].fields.slug}`
+  //   // newGalleryIndex <= galleryAlbums.length
+  // ) {
+  //   console.log('the photo hash is running new');
+  //   currentAlbumIndex = newGalleryIndex;
+  //   removeGalleryPhotos();
+  //   addGalleryPhotos(newGalleryIndex);
+  //   return true;
+  // }
+
   if (window.location.hash === '') {
+    console.log('the photo hash is not running');
     removeGalleryPhotos();
     removeGalleryList();
     addingGalleryList();
@@ -259,7 +304,7 @@ function displayHash() {
 }
 
 const forwardButtClick = () => {
-  const forwardBtn = document.getElementsByClassName('forwardButt')
+  const forwardBtn = document.getElementsByClassName('forwardButt');
   forwardBtn[0].addEventListener('click', () => {
     if (
       currentImageIndex <
@@ -272,7 +317,7 @@ const forwardButtClick = () => {
 };
 
 const backButtClick = () => {
-  const backBtn = document.getElementsByClassName('backButt')
+  const backBtn = document.getElementsByClassName('backButt');
   backBtn[0].addEventListener('click', () => {
     if (currentImageIndex > 0) {
       currentImageIndex -= 1;
@@ -315,7 +360,7 @@ function loadAlbumImages(images, index) {
   imagesTitle = document.createElement('h2');
   imagesTitle.textContent = images.fields.title;
   const imagesDate = document.createElement('p');
-  const date = new Date(images.sys.createdAt * 1000);
+  const date = new Date(images.sys.createdAt);
   imagesDate.textContent = date.toLocaleString('en-GB', {
     year: 'numeric',
     month: 'short',
@@ -342,8 +387,6 @@ function loadAlbumImages(images, index) {
 
 function thumbnailClick(index) {
   currentImageIndex = index;
-  updateSingleImage();
-  addSingleImage();
   displayHash();
   updateUrlHash();
 }
@@ -374,19 +417,21 @@ function handleHoverOut(li) {
 // setupPageElements();
 // setupAlbumListElements();
 albumBackBtn();
+accountDropDownElements();
 // closeMainImage();
 // document.body.appendChild(gallery);
 
 /**
  * event listners
  */
+
 window.addEventListener('hashchange', displayHash);
 // window.addEventListener('DOMContentLoaded', displayHash);
 // forwardButt.addEventListener('click', forwardButtClick);
 // backButt.addEventListener('click', backButtClick);
 // closeBtn.addEventListener('click', closeMainImage);
 
-client.getEntries({ content_type: 'album'}).then(function (entries) {
+client.getEntries({ content_type: 'album' }).then((entries) => {
   entries.items.forEach((entery) => console.log(entery.fields));
   galleryAlbums = entries.items;
   // window.addEventListener('hashchange', displayHash);
