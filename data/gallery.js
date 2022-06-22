@@ -78,8 +78,7 @@ function toggleAccountShow(element) {
 window.onclick = function (e) {
   if (!e.target.matches('.accountBtn')) {
     const dropdowns = document.getElementsByClassName('dropDownContent');
-    let i;
-    for (i = 0; i < dropdowns.length; i++) {
+    for (let i = 0; i < dropdowns.length; i++) {
       const openDropdown = dropdowns[i];
       if (openDropdown.classList.contains('show')) {
         openDropdown.classList.remove('show');
@@ -205,7 +204,7 @@ function removeNextButt() {
 
 // sets the single image file location
 function updateSingleImage() {
-  singleImage.src = `https://${galleryAlbums[currentAlbumIndex].fields.images[currentImageIndex].fields.file.url}`;
+  singleImage.src = `https:${galleryAlbums[currentAlbumIndex].fields.images[currentImageIndex].fields.file.url}`;
   removeNextButt();
   updateUrlHash();
   changePageTitle();
@@ -314,7 +313,7 @@ function addingGalleryListElements(images, index) {
   albumListText.classList.add('albumListText');
   albumListText.textContent = images.fields.title;
   albumListImage = document.createElement('img');
-  albumListImage.src = `https://${images.fields.images[0].fields.file.url}`;
+  albumListImage.src = `https:${images.fields.images[0].fields.file.url}`;
   albumListImage.alt = images.fields.title;
   albumListLi.appendChild(albumListImage);
   albumListLi.appendChild(albumListText);
@@ -333,7 +332,7 @@ function loadAlbumImages(images, index) {
   imagesLi = document.createElement('li');
   imagesLi.classList.add(`photo`);
   imagesImg = document.createElement('img');
-  imagesImg.src = `https://${images.fields.file.url}`;
+  imagesImg.src = `https:${images.fields.file.url}`;
   imagesImg.alt = images.fields.title;
   imagesDesc = document.createElement('p');
   imagesDesc.classList.add('desc');
