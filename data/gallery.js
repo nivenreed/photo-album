@@ -24,13 +24,12 @@ let galleryAlbums = [];
 /**
  * helper functions
  */
-
+ 
 // the main page back button
 function albumBackBtn() {
   const backBtn = document.getElementsByClassName('back');
   backBtn[0].addEventListener('click', () => {
     if (imagesUl.classList == 'thumbnails') {
-      console.log('imagesUl == thumbnails');
       handleCloseButton();
       updateSingleUrlHash();
     } else {
@@ -41,6 +40,53 @@ function albumBackBtn() {
     }
   });
 }
+
+// create the account drop down elements /
+function accountDropDownElements() {
+  const accountBtn = document.getElementsByClassName('accountBtn');
+  const accountDropDown = document.createElement('div');
+  const signIn = document.createElement('a');
+  const profile = document.createElement('a');
+  profile.setAttribute('href', '#');
+  profile.innerHTML = 'Profile';
+  const settings = document.createElement('a');
+  settings.setAttribute('href', '#');
+  settings.innerHTML = 'Settings';
+  const logOut = document.createElement('a');
+  logOut.setAttribute('href', '#');
+  logOut.innerHTML = 'Log Out';
+  accountDropDown.classList.add('dropDownContent');
+  signIn.setAttribute('href', '/index.html');
+  signIn.innerHTML = 'Sign In';
+  accountDropDown.appendChild(profile);
+  accountDropDown.appendChild(settings);
+  accountDropDown.appendChild(signIn);
+  accountDropDown.appendChild(logOut);
+  document.querySelector('.accountBtn').appendChild(accountDropDown);
+
+  accountBtn[0].addEventListener('click', () => {
+    toggleAccountShow(accountDropDown);
+  });
+}
+
+// show acoount drop down menu
+function toggleAccountShow(element) {
+  element.classList.toggle('show');
+}
+
+// closes account dropdown when clicking anywhere on page
+window.onclick = function (e) {
+  if (!e.target.matches('.accountBtn')) {
+    const dropdowns = document.getElementsByClassName('dropDownContent');
+    let i;
+    for (i = 0; i < dropdowns.length; i++) {
+      const openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+};
 
 // gets the image close button icon and the click event
 function closeMainImage() {
@@ -97,63 +143,13 @@ function setupPageElements() {
   forwardButt = document.createElement('button');
   document.body.appendChild(mainImage);
 }
-
-// create the account drop down elements
-function accountDropDownElements() {
-  const accountBtn = document.getElementsByClassName('accountBtn');
-  const accountDropDown = document.createElement('div');
-  const signIn = document.createElement('a');
-  const profile = document.createElement('a');
-  profile.setAttribute('href', '#');
-  profile.innerHTML = 'Profile';
-  const settings = document.createElement('a');
-  settings.setAttribute('href', '#');
-  settings.innerHTML = 'Settings';
-  const logOut = document.createElement('a');
-  logOut.setAttribute('href', '#');
-  logOut.innerHTML = 'Log Out';
-  accountDropDown.classList.add('dropDownContent');
-  signIn.setAttribute('href', '/index.html');
-  signIn.innerHTML = 'Sign In';
-  accountDropDown.appendChild(profile);
-  accountDropDown.appendChild(settings);
-  accountDropDown.appendChild(signIn);
-  accountDropDown.appendChild(logOut);
-  document.querySelector('.accountBtn').appendChild(accountDropDown);
-
-  accountBtn[0].addEventListener('click', () => {
-    toggleAccountShow(accountDropDown);
-  });
-}
-
-// show acoount drop down menu
-function toggleAccountShow(element) {
-  element.classList.toggle('show');
-}
-
-// closes account dropdown when clicking anywhere on page
-window.onclick = function (e) {
-  if (!e.target.matches('.accountBtn')) {
-    const dropdowns = document.getElementsByClassName('dropDownContent');
-    let i;
-    for (i = 0; i < dropdowns.length; i++) {
-      const openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-};
-
 // sets the url hash location for the single image view
 function updateUrlHash() {
-  console.log('updateUrlHash has run');
   window.location.hash = `/${galleryAlbums[currentAlbumIndex].fields.slug}/photo/${currentImageIndex}`;
 }
 
 // sets the url hash location for the album view
 function updateSingleUrlHash() {
-  console.log('updateSingleUrlHash has run');
   window.location.hash = `/${galleryAlbums[currentAlbumIndex].fields.slug}`;
 }
 
@@ -229,23 +225,26 @@ function removeGalleryPhotos() {
 // looping over all the album photos to add them the page
 function addGalleryPhotos(newGalleryIndex) {
   currentAlbumIndex = newGalleryIndex;
-  console.log('addGalleryPhotos', newGalleryIndex);
   galleryAlbums[currentAlbumIndex].fields.images.forEach(loadAlbumImages);
-  // updateSingleUrlHash();
 }
 
-function isPhotoInHash(hashArray, newPhotoIndex, newAlbumIndex){
-return window.location.hash.includes('/photo/') &&
+function isPhotoInHash(newPhotoIndex, newAlbumIndex) {
+  return (
+    window.location.hash.includes('/photo/') &&
     hashArray.length > 2 &&
     newPhotoIndex < galleryAlbums[newAlbumIndex].fields.images.length &&
     newPhotoIndex >= 0 &&
     newPhotoIndex !== ''
-  }
+  );
+}
 
-function  isGalleryIndexInHash(newGalleryIndex){
- return newGalleryIndex >= 0 && 
- window.location.hash.includes(
-    `#/${galleryAlbums[newGalleryIndex].fields.slug}`)
+function isGalleryIndexInHash(newGalleryIndex) {
+  return (
+    newGalleryIndex >= 0 &&
+    window.location.hash.includes(
+      `#/${galleryAlbums[newGalleryIndex].fields.slug}`
+    )
+  );
 }
 
 // gets the album index and photo index from the url
@@ -253,17 +252,13 @@ function displayHash() {
   hashArray = window.location.hash.split('/');
   // set the photo id
   const newPhotoIndex = parseInt(hashArray[3]);
-  console.log('albumIndex', newPhotoIndex, 'albums', galleryAlbums);
 
   const index = galleryAlbums.findIndex(
     (object) => object.fields.slug === hashArray[1]
   );
-  console.log('hashAlbumIndex', index);
   const newGalleryIndex = parseInt(index);
-  
-  if (isPhotoInHash(hashArray, newPhotoIndex, newGalleryIndex)) {
 
-    console.log('the photo hash running');
+  if (isPhotoInHash(newPhotoIndex, newGalleryIndex)) {
     currentImageIndex = newPhotoIndex;
     removeGalleryPhotos();
     addGalleryPhotos(newGalleryIndex);
@@ -272,30 +267,14 @@ function displayHash() {
     addSingleImage();
     return true;
   }
-  if (
-    isGalleryIndexInHash(newGalleryIndex)
-    )
-   {
-    console.log('the album hash is working');
+  if (isGalleryIndexInHash(newGalleryIndex)) {
     currentAlbumIndex = newGalleryIndex;
     removeGalleryPhotos();
     addGalleryPhotos(newGalleryIndex);
     return true;
   }
 
-  // if (
-  //   window.location.hash == `#/${galleryAlbums[currentAlbumIndex].fields.slug}`
-  //   // newGalleryIndex <= galleryAlbums.length
-  // ) {
-  //   console.log('the photo hash is running new');
-  //   currentAlbumIndex = newGalleryIndex;
-  //   removeGalleryPhotos();
-  //   addGalleryPhotos(newGalleryIndex);
-  //   return true;
-  // }
-
   if (window.location.hash === '') {
-    console.log('the photo hash is not running');
     removeGalleryPhotos();
     removeGalleryList();
     addingGalleryList();
@@ -326,6 +305,7 @@ const backButtClick = () => {
   });
 };
 
+// adding the list of multiple gallerys and adding the click to display the single album
 function addingGalleryListElements(images, index) {
   albumH1.textContent = '';
   albumListLi = document.createElement('li');
@@ -347,6 +327,7 @@ function addingGalleryListElements(images, index) {
   });
 }
 
+// loading the single album data and adding the single image view click
 function loadAlbumImages(images, index) {
   albumH1.textContent = galleryAlbums[currentAlbumIndex].fields.title;
   imagesLi = document.createElement('li');
@@ -414,28 +395,17 @@ function handleHoverOut(li) {
 /**
  * Run the page start here
  */
-// setupPageElements();
-// setupAlbumListElements();
 albumBackBtn();
 accountDropDownElements();
-// closeMainImage();
-// document.body.appendChild(gallery);
 
 /**
  * event listners
  */
 
 window.addEventListener('hashchange', displayHash);
-// window.addEventListener('DOMContentLoaded', displayHash);
-// forwardButt.addEventListener('click', forwardButtClick);
-// backButt.addEventListener('click', backButtClick);
-// closeBtn.addEventListener('click', closeMainImage);
 
 client.getEntries({ content_type: 'album' }).then((entries) => {
-  entries.items.forEach((entery) => console.log(entery.fields));
   galleryAlbums = entries.items;
-  // window.addEventListener('hashchange', displayHash);
-  // window.addEventListener('DOMContentLoaded', displayHash);
   setupPageElements();
   setupAlbumListElements();
   displayHash();
