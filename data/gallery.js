@@ -24,7 +24,7 @@ let galleryAlbums = [];
 /**
  * helper functions
  */
- 
+
 // the main page back button
 function albumBackBtn() {
   const backBtn = document.getElementsByClassName('back');
@@ -283,26 +283,31 @@ function displayHash() {
 
 const forwardButtClick = () => {
   const forwardBtn = document.getElementsByClassName('forwardButt');
-  forwardBtn[0].addEventListener('click', () => {
-    if (
-      currentImageIndex <
-      galleryAlbums[currentAlbumIndex].fields.images.length - 1
-    ) {
-      currentImageIndex += 1;
-      updateSingleImage();
-    }
-  });
+  forwardBtn[0].addEventListener('click', nextImage);
 };
+function nextImage() {
+  if (
+    currentImageIndex <
+    galleryAlbums[currentAlbumIndex].fields.images.length - 1
+  ) {
+    currentImageIndex += 1;
+    console.log(currentImageIndex);
+    updateSingleImage();
+  }
+}
 
 const backButtClick = () => {
   const backBtn = document.getElementsByClassName('backButt');
-  backBtn[0].addEventListener('click', () => {
-    if (currentImageIndex > 0) {
-      currentImageIndex -= 1;
-      updateSingleImage();
-    }
-  });
+  backBtn[0].addEventListener('click', previousImage);
 };
+
+function previousImage() {
+  if (currentImageIndex > 0) {
+    currentImageIndex -= 1;
+    console.log(currentImageIndex);
+    updateSingleImage();
+  }
+}
 
 // adding the list of multiple gallerys and adding the click to display the single album
 function addingGalleryListElements(images, index) {
@@ -358,6 +363,7 @@ function loadAlbumImages(images, index) {
   imagesLi.appendChild(imagesOverlay);
   imagesLi.addEventListener('click', () => {
     thumbnailClick(index);
+    console.log(index, 'clicked');
   });
   imagesLi.addEventListener('mouseover', handleHover);
   imagesLi.addEventListener('mouseout', handleHoverOut);
@@ -367,8 +373,8 @@ function loadAlbumImages(images, index) {
 
 function thumbnailClick(index) {
   currentImageIndex = index;
-  displayHash();
   updateUrlHash();
+  displayHash();
 }
 
 function addingGalleryList() {
